@@ -53,7 +53,7 @@
             })
           },
         goLogin(){
-            this.$router.push("/");
+            this.$router.push("/")
         }
       },
       mounted() {
