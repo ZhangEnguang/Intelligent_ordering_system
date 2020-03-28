@@ -22,9 +22,9 @@
       <el-aside width="14%" >
         <UserMsg></UserMsg>
       </el-aside>
-      <el-main style="padding-top: 10px">
+      <el-main style="padding:5px 0 5px 5px;">
         <div class="block">
-          <el-carousel height="190px">
+          <el-carousel height="205px">
             <el-carousel-item v-for="(item,key) in images" :key="key">
               <el-image
                 style="width: 100%; height: 100%;"

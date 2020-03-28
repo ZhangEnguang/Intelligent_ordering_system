@@ -5,7 +5,7 @@
         <el-aside width="14%">
           <NavBar/>
         </el-aside>
-        <el-main >
+        <el-main style="padding:0 0 20px 5px;">
           <router-view></router-view>
         </el-main>
     </el-container>

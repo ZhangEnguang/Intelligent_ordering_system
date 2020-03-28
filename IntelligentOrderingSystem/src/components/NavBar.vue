@@ -2,7 +2,7 @@
 <div >
   <el-row class="el-menu-vertical-demo" style="height: 500px;background-color: #545c64">
     <el-col :span="24">
-      <el-menu default-active='2' class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
+      <el-menu default-active='1-1' class="el-menu-vertical-demo"
                background-color="#545c64"
                text-color="#fff"
                active-text-color="#ffd04b"
@@ -23,8 +23,8 @@
             <span>会员</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="2-1" route="">办理会员</el-menu-item>
-            <el-menu-item index="2-2" route="">积分查询</el-menu-item>
+            <el-menu-item index="2-1" route="/FoodList">办理会员</el-menu-item>
+            <el-menu-item index="2-2" route="">会员充值</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
       </el-menu>
@@ -36,15 +36,7 @@
 
 <script>
     export default {
-        name: "NavBar",
-      methods: {
-        handleOpen(key, keyPath) {
-
-        },
-        handleClose(key, keyPath) {
-
-        }
-      }
+        name: "NavBar"
     }
 </script>
 

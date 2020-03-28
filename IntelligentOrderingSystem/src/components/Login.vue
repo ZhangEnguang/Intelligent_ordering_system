@@ -81,7 +81,7 @@
                     message: '欢迎职员'+res.data.user.name+'点餐',
                     type: 'success'
                   })
-                  this.$router.push('/IorderConfig')
+                  this.$router.push('/FoodList')
                 }else {
                   this.$message({
                     message: '欢迎经理'+res.data.user.name+'登录系统',
@@ -126,7 +126,7 @@
       goOrder(){
         this.$axios.post("/iorder/Login/notLogin")
         .then(res=>{
-          this.$router.push("/IorderConfig")
+          this.$router.push("/FoodList")
         })
         .catch(e=>{
           console.log(e);

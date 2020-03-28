@@ -2,7 +2,7 @@
   <div >
     <el-row>
       <el-col :span="24">
-        <el-card :body-style="{ padding: '0px' }" v-if="isLogin" style="margin-top: 10px;width: auto;height: auto">
+        <el-card :body-style="{ padding: '0px' }" v-if="isLogin" style="margin:5px 0 5px 0;width: auto;height: 205px">
           <img :src="src" class="image">
           <div style="padding: 14px; text-align: center">
             <span style="text-align: center;font-weight: bolder">点餐员{{name}}</span>
@@ -11,7 +11,7 @@
             </div>
           </div>
         </el-card>
-        <el-card :body-style="{ padding: '0px' }" v-if="!isLogin" style="margin-top: 10px;width: auto;height: auto">
+        <el-card :body-style="{ padding: '0px' }" v-if="!isLogin" style="margin:5px 0 5px 0;width: auto;height: 205px">
           <el-image
             style="margin-left: 53px;width: 50%;height: 90px"
             src="static/images/user/isNotLogin.png"
