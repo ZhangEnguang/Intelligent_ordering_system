@@ -69,13 +69,25 @@
             this.$router.push("/");
           }
           if (command == 'b') {
-            this.$axios.post("/iorder/Login/notLogin")
-            .then(res=>{
-              this.$router.push("/");
-            })
-            .catch(e=>{
-              console.log(e);
-            })
+            this.$confirm('您即将退出系统, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$axios.post("/iorder/Login/notLogin")
+                .then(res=>{
+                  this.$router.push("/");
+                })
+                .catch(e=>{
+                  console.log(e);
+                })
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '操作已取消',
+                center:true
+              });
+            });
           }
           if (command == 'c'){
             this.$confirm('您即将退出系统, 是否继续?', '提示', {
