@@ -1,5 +1,5 @@
 <template>
-  <div id="iorder">
+  <div>
     <Header></Header>
     <el-container>
         <el-aside width="14%">

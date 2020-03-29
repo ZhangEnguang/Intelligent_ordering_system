@@ -6,6 +6,9 @@ import Header from "../components/frontViews/Header";
 import FoodList from "../components/frontViews/FoodList";
 import IorderConfig from "../components/views/IorderConfig";
 import UserMsg from "../components/frontViews/UserMsg";
+import HeaderBehind from "../components/behindViews/HeaderBehind";
+import NavBarBehind from "../components/behindViews/NavBarBehind";
+import IorderBehindConfig from "../components/views/IorderBehindConfig";
 
 Vue.use(Router)
 
@@ -36,6 +39,16 @@ export default new Router({
       component: UserMsg
     },
     {
+      path:'/HeaderBehind',
+      name:'HeaderBehind',
+      component:HeaderBehind
+    },
+    {
+      path:'/NavBarBehind',
+      name:'NavBarBehind',
+      component:NavBarBehind
+    },
+    {
       path: '/IorderConfig',
       name: 'IorderConfig',
       component: IorderConfig,
@@ -47,5 +60,17 @@ export default new Router({
         },
       ]
     },
+    {
+      path: '/IorderBehindConfig',
+      name: 'IorderBehindConfig',
+      component: IorderBehindConfig,
+      children:[
+        {
+          path: '/FoodList',
+          name: 'FoodList',
+          component: FoodList
+        },
+      ]
+    }
   ]
 })
