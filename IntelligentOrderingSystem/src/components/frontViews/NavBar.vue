@@ -31,7 +31,6 @@
     </el-col>
   </el-row>
 </div>
-
 </template>
 
 <script>
@@ -41,5 +40,4 @@
 </script>
 
 <style scoped>
-
 </style>
