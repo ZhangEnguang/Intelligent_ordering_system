@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from "../components/Login";
-import NavBar from "../components/NavBar";
-import Header from "../components/Header";
-import FoodList from "../components/FoodList";
+import NavBar from "../components/frontViews/NavBar";
+import Header from "../components/frontViews/Header";
+import FoodList from "../components/frontViews/FoodList";
 import IorderConfig from "../components/views/IorderConfig";
-import UserMsg from "../components/UserMsg";
+import UserMsg from "../components/frontViews/UserMsg";
 
 Vue.use(Router)
 

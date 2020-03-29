@@ -13,8 +13,8 @@
 </template>
 
 <script>
-  import NavBar from "../NavBar";
-  import Header from "../Header";
+  import NavBar from "../frontViews/NavBar";
+  import Header from "../frontViews/Header";
     export default {
         name: "IorderConfig",
       components: {Header, NavBar}
