@@ -7,7 +7,7 @@
                  text-color="#fff"
                  active-text-color="#ffd04b"
                  router>
-          <el-menu-item index="1">
+          <el-menu-item index="1" route="/Home">
             <template slot="title">
               <i class="el-icon-s-home"></i>
               <span>系统首页</span>

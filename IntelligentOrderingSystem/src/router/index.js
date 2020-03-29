@@ -9,6 +9,7 @@ import UserMsg from "../components/frontViews/UserMsg";
 import HeaderBehind from "../components/behindViews/HeaderBehind";
 import NavBarBehind from "../components/behindViews/NavBarBehind";
 import IorderBehindConfig from "../components/views/IorderBehindConfig";
+import Home from "../components/behindViews/Home";
 
 Vue.use(Router)
 
@@ -66,9 +67,9 @@ export default new Router({
       component: IorderBehindConfig,
       children:[
         {
-          path: '/FoodList',
-          name: 'FoodList',
-          component: FoodList
+          path: '/Home',
+          name: 'Home',
+          component: Home
         },
       ]
     }

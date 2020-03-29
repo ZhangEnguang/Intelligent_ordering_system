@@ -87,7 +87,7 @@
                     message: '欢迎经理'+res.data.user.name+'登录系统',
                     type: 'success'
                   })
-                  this.$router.push('/IorderBehindConfig')
+                  this.$router.push('/Home')
                 }
               }else {
                 this.$message({
