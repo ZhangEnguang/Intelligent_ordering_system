@@ -78,13 +78,30 @@
             })
           }
           if (command == 'c'){
-            this.$axios.post("/iorder/Login/notLogin")
-              .then(res=>{
-                this.reload();
-              })
-              .catch(e=>{
-                console.log(e);
-              })
+            this.$confirm('您即将退出系统, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$axios.post("/iorder/Login/notLogin")
+                .then(res=>{
+                  this.reload();
+                  const h = this.$createElement;
+                  this.$notify({
+                    title: '注销提醒',
+                    message: h('i', { style: 'color: teal'}, '您已成功退出登录，请浏览菜品，如需点餐请呼叫职员登录，很高兴为您服务，祝您用餐愉快！')
+                  });
+                })
+                .catch(e=>{
+                  console.log(e);
+                })
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '操作已取消',
+                center:true
+              });
+            });
           }
         }
       },

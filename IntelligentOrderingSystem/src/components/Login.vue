@@ -79,20 +79,23 @@
                 if (res.data.user.root == 1){
                   this.$message({
                     message: '欢迎职员'+res.data.user.name+'点餐',
-                    type: 'success'
+                    type: 'success',
+                    center: true
                   })
                   this.$router.push('/FoodList')
                 }else {
                   this.$message({
                     message: '欢迎经理'+res.data.user.name+'登录系统',
-                    type: 'success'
+                    type: 'success',
+                    center: true
                   })
                   this.$router.push('/Home')
                 }
               }else {
                 this.$message({
                   message: '密码错误请再此输入',
-                  type: 'warning'
+                  type: 'warning',
+                  center:true
                 });
               }
             })
@@ -102,7 +105,8 @@
         }else {
           this.$message({
             message: '用户名或密码不能为空',
-            type: 'warning'
+            type: 'warning',
+            center:true
           });
         }
 
@@ -115,7 +119,8 @@
               if (res.data.user==null){
                 this.$message({
                   message: '用户不存在请重新输入',
-                  type: 'warning'
+                  type: 'warning',
+                  center:true
                 });
               }
             })
