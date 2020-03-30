@@ -95,7 +95,6 @@
               }
             },
             series: [{
-              name: 'pie',
               type: 'pie',
               selectedMode: 'single',
               selectedOffset: 30,

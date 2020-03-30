@@ -2,7 +2,7 @@
   <div >
     <el-row  style="height: 670px;background-color: #545c64;border-top: 1px solid white">
       <el-col :span="24">
-        <el-menu default-active="1" class="el-menu-vertical-demo"
+        <el-menu  class="el-menu-vertical-demo"
                  background-color="#545c64"
                  text-color="#fff"
                  active-text-color="#ffd04b"
@@ -19,7 +19,7 @@
             <span>轮播图管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="2-1" route="">办理会员</el-menu-item>
+            <el-menu-item index="2-1" route="/CarouselList">轮播图列表</el-menu-item>
             <el-menu-item index="2-2" route="">会员充值</el-menu-item>
           </el-menu-item-group>
         </el-submenu>

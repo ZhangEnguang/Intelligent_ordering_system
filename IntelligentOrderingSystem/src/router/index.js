@@ -10,6 +10,7 @@ import HeaderBehind from "../components/behindViews/HeaderBehind";
 import NavBarBehind from "../components/behindViews/NavBarBehind";
 import IorderBehindConfig from "../components/views/IorderBehindConfig";
 import Home from "../components/behindViews/Home";
+import CarouselList from "../components/behindViews/CarouselList";
 
 Vue.use(Router)
 
@@ -71,6 +72,11 @@ export default new Router({
           name: 'Home',
           component: Home
         },
+        {
+          path: '/CarouselList',
+          name: 'CarouselList',
+          component: CarouselList
+        }
       ]
     }
   ]
