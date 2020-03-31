@@ -337,7 +337,7 @@
   }
   .static{
     position:absolute;
-    left:350px;
+    left:365px;
     width:400px;
     z-index: 10;
     background-color: white;
