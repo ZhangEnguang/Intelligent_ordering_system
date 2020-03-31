@@ -28,7 +28,7 @@
             <el-carousel-item v-for="(item,key) in images" :key="key">
               <el-image
                 style="width: 100%; height: 100%;"
-                :src="item.src"
+                :src="'..'+item"
                 fit="fill "></el-image>
             </el-carousel-item>
           </el-carousel>
@@ -46,11 +46,7 @@
       components: {UserMsg},
       data(){
           return{
-              images:[
-                {src:'../static/images/carousel/lunbo1.jpg'},
-                {src:'../static/images/carousel/lunbo2.jpg'},
-                {src:'../static/images/carousel/lunbo3.jpg'},
-              ],
+              images:[],
             isLogin:""
           }
       },
@@ -62,6 +58,19 @@
             })
             .catch(e=>{
               console.log(e);
+            })
+            this.$axios.post("/iorder/Carousel/search")
+            .then(res=>{
+              if (res.data!=null&&res.data!=""){
+                this.images = res.data;
+              }else {
+                this.images.push("/static/images/carousel/lunbo3.jpg");
+                console.log(this.images)
+              }
+
+            })
+            .catch(e=>{
+              console.log(e)
             })
           },
         handleCommand(command) {
