@@ -7,8 +7,11 @@
             <div class="static">
               <el-button type="success" plain size="mini" @click="show">显示</el-button>
               <el-button type="info" plain size="mini" @click="hidden">隐藏</el-button>
-              <el-button type="danger" plain size="mini">删除</el-button>
+              <el-button type="danger" plain size="mini" @click="deleteAll">删除</el-button>
               <el-button type="primary" plain size="mini" @click="addImage">添加</el-button>
+              <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入描述内容"></el-input>
+              <el-button type="primary" @click="search" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-search">查询</el-button>
+              <el-button type="primary" @click="reset" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-refresh-right">重置</el-button>
             </div>
             <el-table
               ref="multipleTable"
@@ -70,7 +73,7 @@
                   <el-button
                     size="mini"
                     type="danger"
-                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                    @click="handleDelete(scope.row)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -93,10 +96,24 @@
       </transition>
 
 
-      <el-dialog title="轮播图信息" :visible.sync="dialogFormVisible">
+      <el-dialog title="编辑轮播图" :visible.sync="dialogFormVisible">
         <el-form :model="form">
-          <el-form-item  :label-width="formLabelWidth">
-            <el-image  :src="form.src" style="height: 200px;width: 300px"></el-image>
+          <el-form-item  :label-width="formLabelWidth" class="avatar-uploader">
+            <el-image v-if="form.src"  :src="form.src" style=" width: 178px; height: 178px;"></el-image>
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-form-item>
+          <el-form-item :label-width="formLabelWidth">
+            <el-upload
+              action="https://jsonplaceholder.typicode.com/posts/"
+              list-type="picture"
+              :on-preview="handlePictureCardPreviewUpdate"
+              :before-upload="beforeAvatarUpload"
+              :file-list="fileList"
+            >
+              <el-button type="primary" size="small" class="el-icon-upload">点击上传</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+
           </el-form-item>
           <el-form-item label="轮播图描述" :label-width="formLabelWidth">
             <el-input v-model="form.desc" autocomplete="on"></el-input>
@@ -104,14 +121,13 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+          <el-button type="primary" @click="update">确 定</el-button>
         </div>
       </el-dialog>
 
     <el-dialog title="添加轮播图" :visible.sync="addForm">
       <el-form :model="addform">
         <el-form-item  :label-width="formLabelWidth" class="avatar-uploader">
-
           <el-image  v-if="addform.src" :src="addform.src" style=" width: 178px; height: 178px;"></el-image>
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-form-item>
@@ -128,7 +144,7 @@
 
         </el-form-item>
         <el-form-item label="轮播图描述" :label-width="formLabelWidth">
-          <el-input v-model="addform.desc" name="desc" autocomplete="on"></el-input>
+          <el-input v-model="addform.desc"  autocomplete="on"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -156,8 +172,16 @@
           axiosParams: new Object(),
           dialogFormVisible: false,
           addForm:false,
+          input:"",
           files:"",
+          updateFile:"",
+          fileList:[],
+          fileItem:{
+            name:'',
+            url:''
+          },
           form: {
+            id:0,
             src: '',
             desc: ''
           },
@@ -173,10 +197,21 @@
           this.ajaxCall();
       },
       methods: {
+        search(){
+          this.currentPage = 1;
+          this.ajaxCall();
+        },
+        reset(){
+          this.input = "";
+          this.ajaxCall();
+        },
+        handlePictureCardPreviewUpdate(res){
+          this.form.src = res.url;
+          this.updateFile=res.raw;
+        },
         handlePictureCardPreview(res){
-          this.files = "";
-          this.addform.src = res.url;
-          this.files=res.raw;
+            this.addform.src = res.url;
+            this.files=res.raw;
         },
         beforeAvatarUpload(file) {
           const isJPGPNG = file.type === 'image/jpeg'||file.type==='image/png'
@@ -211,8 +246,9 @@
                     type:'success',
                     center:true
                   })
+                  this.files = "";
                   this.addForm = false;
-                  this.reload();
+                  this.ajaxCall();
                 }else {
                   this.$message({
                     message:'上传轮播图失败！',
@@ -232,16 +268,53 @@
               center:true
             })
           }
-
+        },
+        update(){
+          if (this.updateFile!=""&&this.updateFile!=null){
+            let formData = new FormData();
+            formData.append("updateFile",this.updateFile);
+            formData.append("description",this.form.desc);
+            formData.append("id",this.form.id);
+            this.$axios.post("/iorder/Carousel/update",formData,{headers:{'Content-Type': 'multipart/form-data;charset=utf-8'}})
+              .then(res=>{
+                if (res.data == true){
+                  this.$message({
+                    message:'修改轮播图成功！',
+                    type:'success',
+                    center:true
+                  })
+                  this.updateFile = "";
+                  this.dialogFormVisible = false;
+                  this.ajaxCall();
+                }else {
+                  this.$message({
+                    message:'修改轮播图失败！',
+                    type:'error',
+                    center:true
+                  })
+                  this.dialogFormVisible = false;
+                }
+              })
+              .catch(e=>{
+                console.log(e)
+              })
+          }else {
+            this.$message({
+              message:'请选择要上传的图片！',
+              type:'warning',
+              center:true
+            })
+          }
         },
         ajaxCall(){
           this.axiosParams = new Object();
           this.axiosParams.pageSize = this.pageSize;
           this.axiosParams.start = this.currentPage;
+          this.axiosParams.input = this.input;
           this.$axios.post("/iorder/Carousel/list",this.axiosParams)
           .then(res=>{
-            this.tableData = res.data.list;
-            this.total = res.data.count;
+            this.tableData = res.data.page.list;
+            this.total = res.data.page.total;
           })
           .catch(e=>{
             console.log(e)
@@ -277,11 +350,53 @@
             }
           })
         },
+        deleteAll(){
+          this.$confirm('此操作将永久删除已选择该文件, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+          .then(()=>{
+            this.multipleSelection.forEach(data=>{
+              this.axiosParams = new Object();
+              this.axiosParams.id = data.id;
+              this.$axios.post("/iorder/Carousel/delete",this.axiosParams)
+                .then(res=>{
+                  if(res.data == true){
+                    this.$message({
+                      type: 'success',
+                      message: '删除成功!'
+                    });
+                    this.currentPage = 1;
+                    this.ajaxCall();
+                  }else {
+                    this.$message({
+                      type: 'error',
+                      message: '删除失败!'
+                    });
+                  }
+
+                })
+                .catch(e=>{
+                  this.$message({
+                    type: 'error',
+                    message: '删除失败!'
+                  });
+                })
+            })
+          }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
+
+        },
         switchChange(event,id){
           this.axiosParams = new Object();
           this.axiosParams.event = event;
           this.axiosParams.id = id;
-          this.$axios.post("iorder/Carousel/updateIsShow",this.axiosParams)
+          this.$axios.post("/iorder/Carousel/updateIsShow",this.axiosParams)
           .then(res=>{
           })
           .catch(e=>{
@@ -289,6 +404,7 @@
           })
         },
         addImage(){
+          this.files = "";
           this.addform.src = "";
           this.addForm = true;
 
@@ -297,12 +413,56 @@
           this.multipleSelection = val;
         },
         handleEdit(row) {
+          this.updateFile = "";
           this.dialogFormVisible = true
-          this.form.src = '.'+row.path;
           this.form.desc = row.description;
+          this.form.id = row.id;
+          this.form.src = "";
+           let s =row.path.split("/");
+           this.fileItem.name = s[s.length-1];
+           this.fileItem.url = '.'+row.path;
+           let item = {"name":this.fileItem.name};
+           let raw = new File([item],this.fileItem.name);
+           this.fileList=[{"raw":raw,"url":this.fileItem.url,"name":this.fileItem.name}];
         },
-        handleDelete(index, row) {
-          console.log(index, row);
+        handleDelete(row) {
+          this.axiosParams = new Object();
+          this.axiosParams.id = row.id;
+          this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$axios.post("/iorder/Carousel/delete",this.axiosParams)
+            .then(res=>{
+              if(res.data == true){
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+                this.currentPage = 1;
+                this.ajaxCall();
+              }else {
+                this.$message({
+                  type: 'error',
+                  message: '删除失败!'
+                });
+              }
+
+            })
+            .catch(e=>{
+              this.$message({
+                type: 'error',
+                message: '删除失败!'
+              });
+            })
+
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });
+          });
         },
         handleSizeChange(val) {
           this.pageSize = val;
@@ -338,9 +498,9 @@
   .static{
     position:absolute;
     left:365px;
-    width:400px;
     z-index: 10;
     background-color: white;
-    width: 1020px;
+    width: 1000px;
+    height: auto;
   }
 </style>
