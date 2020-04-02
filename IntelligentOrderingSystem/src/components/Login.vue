@@ -15,7 +15,7 @@
               <!-- 点击事件的两种不同的写法v-on:click和 @click-->
               <el-image
                 class="el-image"
-                src="./static/images/login/restaurant.png"
+                src="/static/images/login/restaurant.png"
                 fit="fill "></el-image>
             </td>
           </tr>

@@ -7,13 +7,15 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import Axios from "axios";
 import Echarts from "echarts"
+import cookies from "vue-cookies"
 Vue.use(ElementUI)
-
+Vue.use(cookies)
 Vue.prototype.$axios = Axios
 Vue.prototype.$echarts = Echarts
 Axios.defaults.baseURL = '/api'
 Axios.defaults.headers.post['Content-Type'] = 'application/json'
 Vue.config.productionTip = false
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

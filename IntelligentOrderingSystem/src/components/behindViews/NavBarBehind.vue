@@ -20,7 +20,7 @@
           </template>
           <el-menu-item-group>
             <el-menu-item index="2-1" route="/CarouselList">轮播图列表</el-menu-item>
-            <el-menu-item index="2-2" route="">会员充值</el-menu-item>
+            <el-menu-item index="2-2" route="/CarouseShow">轮播图预览</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
           <el-submenu index="3">

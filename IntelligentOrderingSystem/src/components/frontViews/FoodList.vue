@@ -20,6 +20,7 @@
 
 <script>
     export default {
+        inject:['reload'],
         name: "FoodList",
       data: () => ({
         show2: false

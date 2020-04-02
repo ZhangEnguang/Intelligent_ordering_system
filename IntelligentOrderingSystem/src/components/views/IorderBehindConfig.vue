@@ -17,7 +17,15 @@
   import NavBarBehind from "../behindViews/NavBarBehind";
     export default {
         name: "IorderBehindConfig",
-      components: {HeaderBehind, NavBarBehind}
+      components: {HeaderBehind, NavBarBehind},
+      mounted() {
+        let val = this.$cookies.get('userID')
+        if(val == 2){
+          this.$router.push('/Home');
+        }else {
+          this.$router.push('/FoodList');
+        }
+      }
     }
 </script>
 

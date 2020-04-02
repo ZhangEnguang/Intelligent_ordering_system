@@ -1,54 +1,32 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 import Login from "../components/Login";
-import NavBar from "../components/frontViews/NavBar";
-import Header from "../components/frontViews/Header";
 import FoodList from "../components/frontViews/FoodList";
 import IorderConfig from "../components/views/IorderConfig";
-import UserMsg from "../components/frontViews/UserMsg";
-import HeaderBehind from "../components/behindViews/HeaderBehind";
-import NavBarBehind from "../components/behindViews/NavBarBehind";
 import IorderBehindConfig from "../components/views/IorderBehindConfig";
 import Home from "../components/behindViews/Home";
 import CarouselList from "../components/behindViews/CarouselList";
+import CarouseShow from "../components/behindViews/CarouseShow";
 
 Vue.use(Router)
 
-export default new Router({
+const originalPush = Router.prototype.push
+Router.prototype.push = function push (location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
+
+export default new Router(
+  {
   routes: [
     {
       path: '*',
-      redirect:'IorderConfig'
+      redirect:'/FoodList'
     },
     {
       path: '/',
       name: 'Login',
       component: Login
-    },
-    {
-      path: '/NavBar',
-      name: 'NavBar',
-      component: NavBar
-    },
-    {
-      path: '/Header',
-      name: 'Header',
-      component: Header
-    },
-    {
-      path: '/UserMsg',
-      name: 'UserMsg',
-      component: UserMsg
-    },
-    {
-      path:'/HeaderBehind',
-      name:'HeaderBehind',
-      component:HeaderBehind
-    },
-    {
-      path:'/NavBarBehind',
-      name:'NavBarBehind',
-      component:NavBarBehind
     },
     {
       path: '/IorderConfig',
@@ -76,6 +54,11 @@ export default new Router({
           path: '/CarouselList',
           name: 'CarouselList',
           component: CarouselList
+        },
+        {
+          path: '/CarouseShow',
+          name: 'CarouseShow',
+          component: CarouseShow
         }
       ]
     }

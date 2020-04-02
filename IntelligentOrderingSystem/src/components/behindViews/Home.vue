@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #545c64;height: 670px;border-top: 1px solid white">
+  <div class="container">
     <div style="width: 100%;text-align: center;height: 50px">
       <span style="line-height: 50px;font-family: 'Helvetica Neue';font-size: 30px;color: white;font-weight: bolder;">麻辣牛仔菜品月销售统计图</span>
     </div>
@@ -18,7 +18,13 @@
           }
       },
       mounted() {
-        this.drawLine();
+        let val = this.$cookies.get('userID')
+        if(val == 2){
+          this.drawLine();
+        }else {
+          this.$router.push('/FoodList');
+        }
+
       },
       methods:{
         drawLine(){
@@ -124,5 +130,9 @@
 </script>
 
 <style scoped>
-
+  .container{
+    background-color: #545c64;
+    height: 670px;
+    border-top: 1px solid white;
+  }
 </style>

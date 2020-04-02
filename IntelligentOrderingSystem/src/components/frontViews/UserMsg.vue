@@ -2,7 +2,7 @@
   <div >
     <el-row>
       <el-col :span="24">
-        <el-card :body-style="{ padding: '0px' }" v-if="isLogin" style="margin:5px 0 5px 0;width: auto;height: 205px">
+        <el-card :body-style="{ padding: '0px' }" v-if="isLogin" style="margin:5px 0 5px 0;width: auto;height: 205px;background-color: #cecece">
           <img :src="src" class="image">
           <div style="padding: 14px; text-align: center">
             <span style="text-align: center;font-weight: bolder">点餐员{{name}}</span>
@@ -11,10 +11,10 @@
             </div>
           </div>
         </el-card>
-        <el-card :body-style="{ padding: '0px' }" v-if="!isLogin" style="margin:5px 0 5px 0;width: auto;height: 205px">
+        <el-card :body-style="{ padding: '0px' }" v-if="!isLogin" style="margin:5px 0 5px 0;width: auto;height: 205px;background-color: #cecece">
           <el-image
             style="margin-left: 53px;width: 50%;height: 90px"
-            src="static/images/user/isNotLogin.png"
+            src="/static/images/user/isNotLogin.png"
             fit="fill "></el-image>
         <div style="padding: 14px; text-align: center">
           <el-button type="primary" @click="goLogin">请登录</el-button>
