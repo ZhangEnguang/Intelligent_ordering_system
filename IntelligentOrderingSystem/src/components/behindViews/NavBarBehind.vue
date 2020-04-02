@@ -29,7 +29,7 @@
               <span>员工管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="3-1" route="">办理会员</el-menu-item>
+              <el-menu-item index="3-1" route="/EmployeeList">员工列表</el-menu-item>
               <el-menu-item index="3-2" route="">会员充值</el-menu-item>
             </el-menu-item-group>
           </el-submenu>

@@ -78,14 +78,14 @@
               if (res.data.res == true){
                 if (res.data.user.root == 1){
                   this.$message({
-                    message: '欢迎职员'+res.data.user.name+'点餐',
+                    message: '欢迎'+res.data.user.rootName+res.data.user.name+'点餐',
                     type: 'success',
                     center: true
                   })
                   this.$router.push('/FoodList')
                 }else {
                   this.$message({
-                    message: '欢迎经理'+res.data.user.name+'登录系统',
+                    message: '欢迎'+res.data.user.rootName+res.data.user.name+'登录系统',
                     type: 'success',
                     center: true
                   })

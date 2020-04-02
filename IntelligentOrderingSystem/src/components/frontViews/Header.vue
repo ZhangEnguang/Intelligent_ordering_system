@@ -54,7 +54,7 @@
           ajaxCall(){
             this.$axios.post("/iorder/Login/isLogin")
             .then(res=>{
-                this.isLogin = res.data;
+                this.isLogin = res.data.isLogin;
             })
             .catch(e=>{
               console.log(e);
@@ -64,7 +64,7 @@
               if (res.data!=null&&res.data!=""){
                 this.images = res.data;
               }else {
-                this.images.push("/static/images/carousel/lunbo3.jpg");
+                this.images.push("/static/images/default/lunbo3.jpg");
               }
 
             })

@@ -18,7 +18,7 @@
           }
       },
       mounted() {
-        let val = this.$cookies.get('userID')
+        let val = this.$cookies.get('root')
         if(val == 2){
           this.drawLine();
         }else {

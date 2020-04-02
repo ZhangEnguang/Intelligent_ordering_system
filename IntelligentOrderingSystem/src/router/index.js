@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Login from "../components/Login";
-import FoodList from "../components/frontViews/FoodList";
 import IorderConfig from "../components/views/IorderConfig";
 import IorderBehindConfig from "../components/views/IorderBehindConfig";
+import Login from "../components/Login";
+import FoodList from "../components/frontViews/FoodList";
+import DrinkList from "../components/frontViews/DrinkList";
 import Home from "../components/behindViews/Home";
 import CarouselList from "../components/behindViews/CarouselList";
 import CarouseShow from "../components/behindViews/CarouseShow";
+import EmployeeList from "../components/behindViews/EmployeeList";
 
 Vue.use(Router)
 
@@ -38,6 +40,11 @@ export default new Router(
           name: 'FoodList',
           component: FoodList
         },
+        {
+          path: '/DrinkList',
+          name: 'DrinkList',
+          component: DrinkList
+        },
       ]
     },
     {
@@ -59,6 +66,11 @@ export default new Router(
           path: '/CarouseShow',
           name: 'CarouseShow',
           component: CarouseShow
+        },
+        {
+          path: '/EmployeeList',
+          name: 'EmployeeList',
+          component: EmployeeList
         }
       ]
     }

@@ -30,7 +30,7 @@
           }
       },
       mounted() {
-        let val = this.$cookies.get('userID')
+        let val = this.$cookies.get('root')
         if(val == 2){
           this.showMain = true;
           this.ajaxCall();
@@ -45,7 +45,7 @@
                 if (res.data!=null&&res.data!=""){
                   this.images = res.data;
                 }else {
-                  this.images.push("/static/images/carousel/lunbo3.jpg");
+                  this.images.push("/static/images/default/lunbo3.jpg");
                 }
 
               })

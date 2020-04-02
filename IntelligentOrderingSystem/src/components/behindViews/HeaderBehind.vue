@@ -4,15 +4,16 @@
       <el-main style="padding: 0;margin: 0;height: 60px">
         <div style="background: #545c64;width: 100%;height: 100%;line-height: 60px;">
           <span style="color: white;font-weight: bolder;font-size: 40px">麻辣牛仔后台管理系统</span>
-
           <el-dropdown @command="handleCommand" style="float: right;margin-right: 30px">
           <span class="el-dropdown-link">
               <i class="el-icon-arrow-down el-icon--right" style="color: white"></i>
           </span>
             <el-dropdown-menu slot="dropdown" v-if="!isLogin">
+              <el-dropdown-item ><img src="/static/images/default/isNotLogin.png" style="width: 60px;height: 50px;"></el-dropdown-item>
               <el-dropdown-item command="a">登录</el-dropdown-item>
             </el-dropdown-menu>
             <el-dropdown-menu slot="dropdown" v-if="isLogin" >
+              <el-dropdown-item ><img :src="image" style="width: 60px;height: 50px;"></el-dropdown-item>
               <el-dropdown-item command="b">退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -29,14 +30,16 @@
     name: "HeaderBehind",
     data(){
       return{
-        isLogin:""
+        isLogin:"",
+        image:""
       }
     },
     methods:{
       ajaxCall(){
         this.$axios.post("/iorder/Login/isLogin")
           .then(res=>{
-            this.isLogin = res.data;
+            this.isLogin = res.data.isLogin;
+            this.image = res.data.user.img;
           })
           .catch(e=>{
             console.log(e);
