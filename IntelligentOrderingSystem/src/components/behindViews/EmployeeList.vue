@@ -5,7 +5,7 @@
         <div style="width: 100%;text-align: center"><span style="line-height: 50px;font-family: 'Helvetica Neue';font-size: 30px;color: white;font-weight: bolder;">员工列表</span></div>
         <el-header style="height: 40px" class="static">
           <el-button type="danger" plain size="mini" @click="deleteAll">删除</el-button>
-          <el-button type="primary" plain size="mini" @click="addImage">添加</el-button>
+          <el-button type="primary" plain size="mini" @click="addEmp">添加</el-button>
           <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入用户信息"></el-input>
           <el-button type="primary" @click="search" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-search">查询</el-button>
           <el-button type="primary" @click="reset" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-refresh-right">重置</el-button>
@@ -132,8 +132,8 @@
         <el-form-item label="员工姓名" :label-width="formLabelWidth" prop="name">
           <el-input v-model="addform.name"  autocomplete="on"></el-input>
         </el-form-item>
-        <el-form-item label="员工用户名" :label-width="formLabelWidth" prop="username">
-          <el-input v-model="addform.username"  autocomplete="on"></el-input>
+        <el-form-item label="员工用户名" :label-width="formLabelWidth"  prop="username">
+          <el-input v-model="addform.username"  autocomplete="on" @blur="checkExit"></el-input>
         </el-form-item>
         <el-form-item label="员工职位" :label-width="formLabelWidth" prop="value">
           <el-select v-model="addform.value" filterable placeholder="请选择" >
@@ -171,11 +171,11 @@
         }
       };
       var checkUsername=(rule,value,callback)=>{
-        let reg = /^[A-Za-z]+$/
+        let reg = /^[A-Za-z0-9]+$/
         if (!value){
           return callback(new Error('请输入员工用户名'))
         }else if (!reg.test(value)){
-          return callback(new Error('员工用户名只能是英文'))
+          return callback(new Error('员工用户名不能是中文'))
         }else {
           callback()
         }
@@ -216,7 +216,8 @@
             {required: true,validator: checkName,trigger:'blur'}
           ],
           username:[
-            {required: true,validator: checkUsername,trigger:'blur'}
+            {required: true,validator: checkUsername,trigger:'blur'},
+            { min: 3, max: 11, message: '长度在 3 到 11个字符', trigger: 'blur' }
           ],
           value:[
             {required: true, message: '请选择员工职位', trigger: 'change' }
@@ -235,6 +236,24 @@
 
     },
     methods: {
+      checkExit(){
+        this.axiosParams = new Object();
+        this.axiosParams.username = this.addform.username;
+        this.$axios.post("/iorder/Login/isExit",this.axiosParams)
+        .then(res=>{
+          if (res.data.user!=null){
+            this.$message({
+              message: '用户名已存在！',
+              type: 'warning',
+              center:true
+            });
+            this.addform.username = "";
+          }
+        })
+        .catch(e=>{
+          console.log(e)
+        })
+      },
       search(){
         this.currentPage = 1;
         this.ajaxCall();
@@ -416,7 +435,7 @@
             this.multipleSelection.forEach(data=>{
               this.axiosParams = new Object();
               this.axiosParams.id = data.id;
-              this.$axios.post("/iorder/Carousel/delete",this.axiosParams)
+              this.$axios.post("/iorder/User/delete",this.axiosParams)
                 .then(res=>{
                   if(res.data == true){
                     this.$message({
@@ -459,9 +478,12 @@
             console.log(e)
           })
       },
-      addImage(){
+      addEmp(){
         this.files = "";
         this.addform.src = "";
+        this.addform.username = "";
+        this.addform.name = "";
+        this.addform.value = "";
         this.addForm = true;
 
       },
@@ -489,7 +511,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$axios.post("/iorder/Carousel/delete",this.axiosParams)
+          this.$axios.post("/iorder/User/delete",this.axiosParams)
             .then(res=>{
               if(res.data == true){
                 this.$message({

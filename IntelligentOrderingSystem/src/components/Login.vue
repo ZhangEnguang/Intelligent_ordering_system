@@ -48,6 +48,21 @@
           </tr>
         </table>
       </el-card>
+      <el-dialog title="权限选择" :visible.sync="dialogTableVisible" style="margin: 0 auto;width: 800px;">
+        <div style="text-align: center;height: 100px;margin-top: 50px">
+          <el-select v-model="value" filterable placeholder="请选择" >
+            <el-option
+              v-for="(item,key) in root"
+              :key="key"
+              :label="item.rootName"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="dialogTableVisible = false">确定</el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -62,8 +77,20 @@
           password:'',
           //为了登录方便，可以直接在这里写好用户名和密码的值
         },
+        dialogTableVisible:false,
+        root:[],
+        value:'',
         axiosParams:new Object()
       }
+    },
+    mounted() {
+      this.$axios.post("/iorder/Root/list")
+        .then(res=>{
+          this.root = res.data.list;
+        })
+        .catch(e=>{
+          console.log(e)
+        })
     },
     methods:{
       ajaxCall(){
@@ -76,21 +103,45 @@
           this.$axios.post("/iorder/Login/login",this.axiosParams)
             .then(res=>{
               if (res.data.res == true){
-                if (res.data.user.root == 1){
-                  this.$message({
-                    message: '欢迎'+res.data.user.rootName+res.data.user.name+'点餐',
-                    type: 'success',
-                    center: true
-                  })
-                  this.$router.push('/FoodList')
+                if (res.data.user.username == "root"){
+                    this.dialogTableVisible = true;
+                    res.data.user.root = this.value;
+                  if (res.data.user.root == 1){
+                    this.$message({
+                      message: '欢迎'+res.data.user.rootName+res.data.user.name+'点餐',
+                      type: 'success',
+                      center: true
+                    });
+                    this.$cookies.set("root",res.data.user.root,"1d");
+                    this.$router.push('/FoodList')
+                  }
+                  if (res.data.user.root == 2){
+                    this.$message({
+                      message: '欢迎'+res.data.user.rootName+res.data.user.name+'登录系统',
+                      type: 'success',
+                      center: true
+                    });
+                    this.$router.push('/Home')
+                  }
                 }else {
-                  this.$message({
-                    message: '欢迎'+res.data.user.rootName+res.data.user.name+'登录系统',
-                    type: 'success',
-                    center: true
-                  })
-                  this.$router.push('/Home')
+                  if (res.data.user.root == 1){
+                    this.$message({
+                      message: '欢迎'+res.data.user.rootName+res.data.user.name+'点餐',
+                      type: 'success',
+                      center: true
+                    });
+                    this.$router.push('/FoodList')
+                  }
+                  if (res.data.user.root == 2){
+                    this.$message({
+                      message: '欢迎'+res.data.user.rootName+res.data.user.name+'登录系统',
+                      type: 'success',
+                      center: true
+                    });
+                    this.$router.push('/Home')
+                  }
                 }
+
               }else {
                 this.$message({
                   message: '密码错误请再此输入',

@@ -19,7 +19,7 @@
         name: "IorderConfig",
       components: {Header, NavBar},
       mounted() {
-        let val = this.$cookies.get('userID')
+        let val = this.$cookies.get('root')
         if(val == 2){
           this.$router.push('/Home')
         }else {
