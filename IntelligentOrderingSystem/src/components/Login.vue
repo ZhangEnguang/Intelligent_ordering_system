@@ -108,7 +108,7 @@
                     res.data.user.root = this.value;
                   if (res.data.user.root == 1){
                     this.$message({
-                      message: '欢迎'+res.data.user.rootName+res.data.user.name+'点餐',
+                      message: '欢迎职员'+res.data.user.name+'点餐',
                       type: 'success',
                       center: true
                     });

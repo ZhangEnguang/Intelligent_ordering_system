@@ -33,7 +33,7 @@
               align="center"
               width="120">
               <template slot-scope="scope">
-                <el-image class="image" :src="scope.row.img" :preview-src-list="[scope.row.img]"></el-image>
+                <el-image class="image" :src="'.'+scope.row.img" :preview-src-list="[scope.row.img]"></el-image>
               </template>
             </el-table-column>
             <el-table-column
@@ -85,8 +85,8 @@
 
 
     <el-dialog title="编辑员工信息" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item  :label-width="formLabelWidth" class="avatar-uploader">
+      <el-form :model="form" ref="form" :rules="rules">
+        <el-form-item  :label-width="formLabelWidth" class="avatar-uploader" prop="src">
           <el-image v-if="form.src"  :src="form.src" style=" width: 178px; height: 178px;"></el-image>
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-form-item>
@@ -96,21 +96,32 @@
             list-type="picture"
             :on-preview="handlePictureCardPreviewUpdate"
             :before-upload="beforeAvatarUpload"
-            :file-list="fileList"
-          >
+            :file-list="fileList">
             <el-button type="primary" size="small" class="el-icon-upload">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
-
         </el-form-item>
-        <el-form-item label="轮播图描述" :label-width="formLabelWidth">
-          <el-input v-model="form.desc" autocomplete="on"></el-input>
+        <el-form-item label="员工姓名" :label-width="formLabelWidth" prop="name">
+          <el-input v-model="form.name"  autocomplete="on"></el-input>
+        </el-form-item>
+        <el-form-item label="员工用户名" :label-width="formLabelWidth"  prop="username">
+          <el-input v-model="form.username"  autocomplete="on" @blur="checkUpdate"></el-input>
+        </el-form-item>
+        <el-form-item label="员工职位" :label-width="formLabelWidth" prop="value">
+          <el-select v-model="form.value" filterable placeholder="请选择" >
+            <el-option
+              v-for="(item,key) in root"
+              :key="key"
+              :label="item.rootName"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item style="margin-left:  500px">
+          <el-button @click="resetForm('form')">重置</el-button>
+          <el-button type="primary" @click="update('form')">确 定</el-button>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="update">确 定</el-button>
-      </div>
     </el-dialog>
 
     <el-dialog title="添加员工" :visible.sync="addForm">
@@ -202,7 +213,9 @@
         form: {
           id:0,
           src: '',
-          desc: ''
+          name:'',
+          username:'',
+          value:''
         },
         addform: {
           src: '',
@@ -236,6 +249,25 @@
 
     },
     methods: {
+      checkUpdate(){
+        this.axiosParams = new Object();
+        this.axiosParams.username = this.form.username;
+        this.axiosParams.id = this.form.id;
+        this.$axios.post("/iorder/User/isExit",this.axiosParams)
+        .then(res=>{
+          if ((res.data == false)){
+            this.$message({
+              message: '用户名已存在！',
+              type: 'warning',
+              center:true
+            });
+            this.form.username = "";
+          }
+        })
+        .catch(e=>{
+          console.log(e)
+        })
+      },
       checkExit(){
         this.axiosParams = new Object();
         this.axiosParams.username = this.addform.username;
@@ -264,6 +296,7 @@
       },
       resetForm(formName){
         this.files = "";
+        this.updateFile = "";
         this.$refs[formName].resetFields();
       },
       handlePictureCardPreviewUpdate(res){
@@ -335,44 +368,49 @@
             }
           }
         });
-
       },
-      update(){
-        if (this.updateFile!=""&&this.updateFile!=null){
-          let formData = new FormData();
-          formData.append("updateFile",this.updateFile);
-          formData.append("description",this.form.desc);
-          formData.append("id",this.form.id);
-          this.$axios.post("/iorder/Carousel/update",formData,{headers:{'Content-Type': 'multipart/form-data;charset=utf-8'}})
-            .then(res=>{
-              if (res.data == true){
-                this.$message({
-                  message:'修改轮播图成功！',
-                  type:'success',
-                  center:true
+      update(formName){
+        this.$refs[formName].validate((valid)=>{
+          if (valid){
+            if (this.updateFile!=""&&this.updateFile!=null){
+              let formData = new FormData();
+              formData.append("updateFile",this.updateFile);
+              formData.append("username",this.form.username);
+              formData.append("name",this.form.name);
+              formData.append("root",this.form.value);
+              formData.append("id",this.form.id);
+              this.$axios.post("/iorder/User/update",formData,{headers:{'Content-Type': 'multipart/form-data;charset=utf-8'}})
+                .then(res=>{
+                  if (res.data == true){
+                    this.$message({
+                      message:'修改员工信息成功！',
+                      type:'success',
+                      center:true
+                    })
+                    this.updateFile = "";
+                    this.dialogFormVisible = false;
+                    this.ajaxCall();
+                  }else {
+                    this.$message({
+                      message:'修改员工信息失败！',
+                      type:'error',
+                      center:true
+                    })
+                    this.dialogFormVisible = false;
+                  }
                 })
-                this.updateFile = "";
-                this.dialogFormVisible = false;
-                this.ajaxCall();
-              }else {
-                this.$message({
-                  message:'修改轮播图失败！',
-                  type:'error',
-                  center:true
+                .catch(e=>{
+                  console.log(e)
                 })
-                this.dialogFormVisible = false;
-              }
-            })
-            .catch(e=>{
-              console.log(e)
-            })
-        }else {
-          this.$message({
-            message:'请选择要上传的图片！',
-            type:'warning',
-            center:true
-          })
-        }
+            }else {
+              this.$message({
+                message:'请选择要上传的图片！',
+                type:'warning',
+                center:true
+              })
+            }
+          }
+        });
       },
       ajaxCall(){
         this.axiosParams = new Object();
@@ -393,36 +431,6 @@
         })
         .catch(e=>{
           console.log(e)
-        })
-      },
-      show(){
-        this.multipleSelection.forEach(data=>{
-          if (data.isShow == 0){
-            data.isShow = 1;
-            this.axiosParams = new Object();
-            this.axiosParams.id = data.id;
-            this.$axios.post("/iorder/Carousel/show",this.axiosParams)
-              .then(res=>{
-              })
-              .catch(e=>{
-                console.log(e)
-              })
-          }
-        })
-      },
-      hidden(){
-        this.multipleSelection.forEach(data=>{
-          if (data.isShow == 1){
-            data.isShow = 0;
-            this.axiosParams = new Object();
-            this.axiosParams.id = data.id;
-            this.$axios.post("/iorder/Carousel/hidden",this.axiosParams)
-              .then(res=>{
-              })
-              .catch(e=>{
-                console.log(e)
-              })
-          }
         })
       },
       deleteAll(){
@@ -467,17 +475,6 @@
         });
 
       },
-      switchChange(event,id){
-        this.axiosParams = new Object();
-        this.axiosParams.event = event;
-        this.axiosParams.id = id;
-        this.$axios.post("/iorder/Carousel/updateIsShow",this.axiosParams)
-          .then(res=>{
-          })
-          .catch(e=>{
-            console.log(e)
-          })
-      },
       addEmp(){
         this.files = "";
         this.addform.src = "";
@@ -485,20 +482,21 @@
         this.addform.name = "";
         this.addform.value = "";
         this.addForm = true;
-
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
       handleEdit(row) {
         this.updateFile = "";
-        this.dialogFormVisible = true
-        this.form.desc = row.description;
+        this.dialogFormVisible = true;
+        this.form.name = row.name;
+        this.form.username = row.username;
+        this.form.value = row.root;
         this.form.id = row.id;
         this.form.src = "";
-        let s =row.path.split("/");
+        let s =row.img.split("/");
         this.fileItem.name = s[s.length-1];
-        this.fileItem.url = '.'+row.path;
+        this.fileItem.url = '.'+row.img;
         let item = {"name":this.fileItem.name};
         let raw = new File([item],this.fileItem.name);
         this.fileList=[{"raw":raw,"url":this.fileItem.url,"name":this.fileItem.name}];

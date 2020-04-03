@@ -33,6 +33,7 @@ export default new Router(
     {
       path: '/IorderConfig',
       name: 'IorderConfig',
+      redirect:'/FoodList',
       component: IorderConfig,
       children:[
         {
@@ -50,6 +51,7 @@ export default new Router(
     {
       path: '/IorderBehindConfig',
       name: 'IorderBehindConfig',
+      redirect:'/Home',
       component: IorderBehindConfig,
       children:[
         {
