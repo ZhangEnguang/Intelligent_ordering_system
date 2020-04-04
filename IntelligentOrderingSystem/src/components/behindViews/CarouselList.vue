@@ -54,8 +54,7 @@
               </el-table-column>
               <el-table-column
                 label="是否显示"
-                align="center"
-                show-overflow-tooltip>
+                align="center">
                 <template slot-scope="scope">
                   <el-switch
                     v-model="scope.row.isShow "

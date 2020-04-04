@@ -165,6 +165,7 @@
           if (valid){
             this.axiosParams = new Object();
             this.axiosParams.username = this.user.username;
+            this.axiosParams.name = this.ruleForm.name;
             this.axiosParams.password = this.ruleForm.pass;
             this.$axios.post("/iorder/User/updatePass",this.axiosParams)
             .then(res=>{
@@ -248,42 +249,50 @@
           this.$axios.post("/iorder/Login/login",this.axiosParams)
             .then(res=>{
               if (res.data.res == true){
-                if (res.data.user.root==3){
+                if (res.data.user.state == 0){
+                  this.$message({
+                    message: '您的账户已锁定！',
+                    type: 'error',
+                    center: true
+                  });
+                }else {
+                  if (res.data.user.root==3){
                     this.dialogTableVisible = true;
                     res.data.user.root = this.value;
-                  if (res.data.user.root != 2&&res.data.user.root!=""&&res.data.user.root!=null){
-                    this.$message({
-                      message: '欢迎'+res.data.user.rootName+res.data.user.name+'点餐',
-                      type: 'success',
-                      center: true
-                    });
-                    this.$cookies.set("root",res.data.user.root,"1d");
-                    this.$router.push('/FoodList')
-                  }
-                  if (res.data.user.root == 2){
-                    this.$message({
-                      message: '欢迎'+res.data.user.rootName+res.data.user.name+'登录系统',
-                      type: 'success',
-                      center: true
-                    });
-                    this.$cookies.set("root",res.data.user.root,"1d");
-                    this.$router.push('/Home')
-                  }
-                }else {
-                  if (res.data.user.root == 2){
-                    this.$message({
-                      message: '欢迎'+res.data.user.rootName+res.data.user.name+'点餐',
-                      type: 'success',
-                      center: true
-                    });
-                    this.$router.push('/Home')
-                  }else{
-                    this.$message({
-                      message: '欢迎'+res.data.user.rootName+res.data.user.name+'登录系统',
-                      type: 'success',
-                      center: true
-                    });
-                    this.$router.push('/FoodList')
+                    if (res.data.user.root != 2&&res.data.user.root!=""&&res.data.user.root!=null){
+                      this.$message({
+                        message: '欢迎'+res.data.user.rootName+res.data.user.name+'点餐',
+                        type: 'success',
+                        center: true
+                      });
+                      this.$cookies.set("root",res.data.user.root,"1d");
+                      this.$router.push('/FoodList')
+                    }
+                    if (res.data.user.root == 2){
+                      this.$message({
+                        message: '欢迎'+res.data.user.rootName+res.data.user.name+'登录系统',
+                        type: 'success',
+                        center: true
+                      });
+                      this.$cookies.set("root",res.data.user.root,"1d");
+                      this.$router.push('/Home')
+                    }
+                  }else {
+                    if (res.data.user.root == 2){
+                      this.$message({
+                        message: '欢迎'+res.data.user.rootName+res.data.user.name+'点餐',
+                        type: 'success',
+                        center: true
+                      });
+                      this.$router.push('/Home')
+                    }else{
+                      this.$message({
+                        message: '欢迎'+res.data.user.rootName+res.data.user.name+'登录系统',
+                        type: 'success',
+                        center: true
+                      });
+                      this.$router.push('/FoodList')
+                    }
                   }
                 }
 

@@ -9,6 +9,7 @@ import Home from "../components/behindViews/Home";
 import CarouselList from "../components/behindViews/CarouselList";
 import CarouseShow from "../components/behindViews/CarouseShow";
 import EmployeeList from "../components/behindViews/EmployeeList";
+import RootList from "../components/behindViews/RootList";
 
 Vue.use(Router)
 
@@ -73,6 +74,11 @@ export default new Router(
           path: '/EmployeeList',
           name: 'EmployeeList',
           component: EmployeeList
+        },
+        {
+          path: '/RootList',
+          name: 'RootList',
+          component: RootList
         }
       ]
     }
