@@ -9,7 +9,7 @@
                 <el-carousel-item v-for="(item,key) in images" :key="key">
                   <el-image
                     style="width: 100%; height: 100%;"
-                    :src="item"
+                    :src="'.'+item"
                     fit="fill "></el-image>
                 </el-carousel-item>
               </el-carousel>
@@ -45,7 +45,7 @@
                 if (res.data!=null&&res.data!=""){
                   this.images = res.data;
                 }else {
-                  this.images.push("/static/images/default/lunbo3.jpg");
+                  this.images.push("./static/images/default/lunbo3.jpg");
                 }
 
               })

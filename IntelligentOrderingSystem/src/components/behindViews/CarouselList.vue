@@ -35,7 +35,7 @@
                 align="center"
                 width="120">
                 <template slot-scope="scope">
-                  <el-image class="image" :src="scope.row.path" :preview-src-list="[scope.row.path]"></el-image>
+                  <el-image class="image" :src="'.'+scope.row.path" :preview-src-list="['.'+scope.row.path]"></el-image>
                 </template>
               </el-table-column>
               <el-table-column

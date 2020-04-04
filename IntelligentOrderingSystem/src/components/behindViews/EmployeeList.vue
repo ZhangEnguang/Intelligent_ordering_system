@@ -33,7 +33,7 @@
               align="center"
               width="120">
               <template slot-scope="scope">
-                <el-image class="image" :src="'.'+scope.row.img" :preview-src-list="[scope.row.img]"></el-image>
+                <el-image class="image" :src="'.'+scope.row.img" :preview-src-list="['.'+scope.row.img]"></el-image>
               </template>
             </el-table-column>
             <el-table-column
@@ -84,8 +84,8 @@
     </transition>
 
 
-    <el-dialog title="编辑员工信息" :visible.sync="dialogFormVisible">
-      <el-form :model="form" ref="form" :rules="rules">
+    <el-dialog title="编辑员工信息" :visible.sync="dialogFormVisible" >
+      <el-form :model="form" ref="form" :rules="rules" status-icon>
         <el-form-item  :label-width="formLabelWidth" class="avatar-uploader" prop="src">
           <el-image v-if="form.src"  :src="form.src" style=" width: 178px; height: 178px;"></el-image>
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -124,8 +124,8 @@
       </el-form>
     </el-dialog>
 
-    <el-dialog title="添加员工" :visible.sync="addForm">
-      <el-form :model="addform" ref="addform" :rules="rules">
+    <el-dialog title="添加员工" :visible.sync="addForm" >
+      <el-form :model="addform" ref="addform" :rules="rules" status-icon>
         <el-form-item  :label-width="formLabelWidth" class="avatar-uploader" prop="src">
           <el-image  v-if="addform.src" :src="addform.src" style=" width: 178px; height: 178px;"></el-image>
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
