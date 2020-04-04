@@ -144,7 +144,7 @@
       }
     },
     mounted() {
-      this.$axios.post("/iorder/Root/list")
+      this.$axios.post("/iorder/Root/listNoRoot")
         .then(res=>{
           this.root = res.data.list;
         })
