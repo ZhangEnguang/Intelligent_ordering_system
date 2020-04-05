@@ -501,7 +501,7 @@
   }
   .static{
     position:absolute;
-    margin-left: 130px;
+    margin-left: 140px;
     z-index: 6;
     background-color: white;
     width: 1000px;

@@ -54,7 +54,10 @@
               label="职位"
               align="center"
               width="100px">
-              <template slot-scope="scope">{{scope.row.rootName}}</template>
+              <template  slot-scope="scope">
+                <span v-if="scope.row.rootName == '无'">暂无职位</span>
+                <span v-else>{{scope.row.rootName}}</span>
+              </template>
             </el-table-column>
             <el-table-column
               label="是否锁定"
@@ -62,11 +65,19 @@
               width="100px">
               <template slot-scope="scope">
                 <el-switch
+                  v-if="scope.row.root == 5"
                   v-model="scope.row.state"
                   :active-value="1"
                   :inactive-value="0"
                   active-color="#13ce66"
-                  inactive-color="#ff4949" @change="switchChange($event,scope.row.id)" ></el-switch>
+                  inactive-color="#ff4949" disabled ></el-switch>
+                <el-switch
+                  v-else
+                  v-model="scope.row.state"
+                  :active-value="1"
+                  :inactive-value="0"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949" @change="switchChange($event,scope.row.id,scope.row.root,scope.row.state)" ></el-switch>
               </template>
             </el-table-column>
             <el-table-column
@@ -135,6 +146,7 @@
           <el-select v-model="form.value" filterable placeholder="请选择" >
             <el-option
               v-for="(item,key) in root"
+              :disabled="item.disabled"
               :key="key"
               :label="item.rootName"
               :value="item.id">
@@ -175,6 +187,7 @@
             <el-option
               v-for="(item,key) in root"
               :key="key"
+              :disabled="item.disabled"
               :label="item.rootName"
               :value="item.id">
             </el-option>
@@ -274,15 +287,15 @@
     },
     methods: {
       switchChange(event,id){
-        this.axiosParams = new Object();
-        this.axiosParams.event = event;
-        this.axiosParams.id = id;
-        this.$axios.post("/iorder/User/updateState",this.axiosParams)
-          .then(res=>{
-          })
-          .catch(e=>{
-            console.log(e)
-          })
+          this.axiosParams = new Object();
+          this.axiosParams.event = event;
+          this.axiosParams.id = id;
+          this.$axios.post("/iorder/User/updateState",this.axiosParams)
+            .then(res=>{
+            })
+            .catch(e=>{
+              console.log(e)
+            })
       },
       lock(){
         this.multipleSelection.forEach(data=>{
@@ -301,17 +314,26 @@
       },
       unlock(){
         this.multipleSelection.forEach(data=>{
-          if (data.state == 0){
-            data.state = 1;
-            this.axiosParams = new Object();
-            this.axiosParams.id = data.id;
-            this.$axios.post("/iorder/User/unlock",this.axiosParams)
-              .then(res=>{
-              })
-              .catch(e=>{
-                console.log(e)
-              })
+          if (data.root!=5){
+            if (data.state == 0){
+              data.state = 1;
+              this.axiosParams = new Object();
+              this.axiosParams.id = data.id;
+              this.$axios.post("/iorder/User/unlock",this.axiosParams)
+                .then(res=>{
+                })
+                .catch(e=>{
+                  console.log(e)
+                })
+            }
+          }else {
+            this.$message({
+              message:'请为员工选择职位！',
+              type:'warning',
+              center:true
+            })
           }
+
         })
       },
       checkUpdate(){
@@ -493,14 +515,15 @@
           });
         this.$axios.post("/iorder/Root/list")
         .then(res=>{
-          this.root = res.data.list;
+          res.data.list.push({id:5,rootName:'无',disabled:true});
+          this.root =res.data.list;
         })
         .catch(e=>{
           console.log(e)
         })
       },
       deleteAll(){
-        this.$confirm('此操作将永久删除已选择该文件, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除已选择的职员, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -526,7 +549,7 @@
                   }
 
                 })
-                .catch(e=>{
+                .catch(()=>{
                   this.$message({
                     type: 'error',
                     message: '删除失败!'
@@ -570,7 +593,7 @@
       handleDelete(row) {
         this.axiosParams = new Object();
         this.axiosParams.id = row.id;
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除该职员, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -639,7 +662,7 @@
   }
   .static{
     position:absolute;
-    margin-left: 130px;
+    margin-left: 140px;
     z-index: 6;
     background-color: white;
     width: 1000px;
