@@ -6,6 +6,7 @@
           <img :src="src" class="image">
           <div style="padding: 14px; text-align: center">
             <span style="text-align: center;font-weight: bolder">点餐员{{name}}</span>
+            <div><span style="text-align: center;">评分{{rate}}</span></div>
             <div class="bottom clearfix">
               <time class="time">{{ currentDate }}</time>
             </div>
@@ -36,6 +37,7 @@
           currentDate: new Date(),
           src:'',
           name:'',
+          rate:'',
           isLogin:false
         };
       },
@@ -47,6 +49,7 @@
                 this.isLogin = true;
                 this.src = "."+res.data.user.img;
                 this.name = res.data.user.name;
+                this.rate = res.data.user.rate;
               }else {
                 this.isLogin = false;
               }
@@ -75,7 +78,7 @@
 
   .image {
     width: 150px;
-    height: 120px;
+    height: 100px;
     margin: 0 auto;
     display: block;
   }

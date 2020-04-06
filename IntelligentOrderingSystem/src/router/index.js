@@ -10,6 +10,8 @@ import CarouselList from "../components/behindViews/CarouselList";
 import CarouseShow from "../components/behindViews/CarouseShow";
 import EmployeeList from "../components/behindViews/EmployeeList";
 import RootList from "../components/behindViews/RootList";
+import FoodTypeList from "../components/behindViews/FoodTypeList";
+import FoodBehindList from "../components/behindViews/FoodBehindList";
 
 Vue.use(Router)
 
@@ -79,6 +81,16 @@ export default new Router(
           path: '/RootList',
           name: 'RootList',
           component: RootList
+        },
+        {
+          path: '/FoodTypeList',
+          name: 'FoodTypeList',
+          component: FoodTypeList
+        },
+        {
+          path: '/FoodBehindList',
+          name: 'FoodBehindList',
+          component: FoodBehindList
         }
       ]
     }

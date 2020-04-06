@@ -4,8 +4,8 @@
       <div v-show="showMain" style="height: 500px">
         <div style="width: 100%;text-align: center"><span style="line-height: 50px;font-family: 'Helvetica Neue';font-size: 30px;color: white;font-weight: bolder;">员工列表</span></div>
         <el-header style="height: 40px" class="static">
-          <el-button type="success" plain size="mini" @click="unlock">解锁</el-button>
-          <el-button type="info" plain size="mini" @click="lock">锁定</el-button>
+          <el-button type="success" plain size="mini" @click="unlock">上架</el-button>
+          <el-button type="info" plain size="mini" @click="lock">下架</el-button>
           <el-button type="danger" plain size="mini" @click="deleteAll">删除</el-button>
           <el-button type="primary" plain size="mini" @click="addEmp">添加</el-button>
           <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入用户信息"></el-input>
@@ -24,42 +24,42 @@
               align="center">
             </el-table-column>
             <el-table-column
+              label="序号"
+              align="center"
+              type="index"
+              width="50px">
+            </el-table-column>
+            <el-table-column
               label="编号"
               align="center"
               type="index"
-              width="50px">
-            </el-table-column>
-            <el-table-column
-              label="工号"
-              align="center"
-              type="index"
-              width="50px">
+              width="100px">
               <template slot-scope="scope">{{scope.row.id}}</template>
             </el-table-column>
             <el-table-column
-              label="头像"
+              label="图片"
               align="center"
-              width="100px">
+              width="150px">
               <template slot-scope="scope">
                 <el-image class="image" :src="'.'+scope.row.img" :preview-src-list="['.'+scope.row.img]"></el-image>
               </template>
             </el-table-column>
             <el-table-column
-              label="姓名"
+              label="菜品名称"
               align="center"
-              width="50px"
+              width="100px"
               show-overflow-tooltip>
               <template slot-scope="scope">{{scope.row.name}}</template>
             </el-table-column>
             <el-table-column
-              label="用户名"
+              label="所属种类"
               align="center"
               width="100px"
               show-overflow-tooltip>
               <template slot-scope="scope">{{scope.row.username}}</template>
             </el-table-column>
             <el-table-column
-              label="职位"
+              label="单价"
               align="center"
               width="100px">
               <template  slot-scope="scope">
@@ -68,25 +68,26 @@
               </template>
             </el-table-column>
             <el-table-column
-              label="服务次数"
+              label="菜品描述"
               align="center"
+              show-overflow-tooltip
               width="100px">
               <template slot-scope="scope">{{scope.row.serviceTimes}}</template>
             </el-table-column>
             <el-table-column
-              label="服务累计评分"
+              label="是否打折"
               align="center"
               width="150px">
               <template slot-scope="scope">{{scope.row.serviceGrade}}</template>
             </el-table-column>
             <el-table-column
-              label="平均评分"
+              label="折扣"
               align="center"
               width="80px">
               <template slot-scope="scope">{{scope.row.rate}}</template>
             </el-table-column>
             <el-table-column
-              label="是否锁定"
+              label="是否上架"
               align="center"
               width="100px">
               <template slot-scope="scope">
@@ -105,14 +106,6 @@
                   active-color="#13ce66"
                   inactive-color="#ff4949" @change="switchChange($event,scope.row.id,scope.row.root,scope.row.state)" ></el-switch>
               </template>
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              sortable
-              label="入职时间"
-              align="center"
-              show-overflow-tooltip>
-              <template slot-scope="scope">{{scope.row.date}}</template>
             </el-table-column>
             <el-table-column label="操作" align="center" >
               <template slot-scope="scope">
@@ -232,7 +225,7 @@
 
 <script>
   export default {
-    name: "EmployeeList",
+    name: "FoodBehindList",
     data() {
       var checkName=(rule,value,callback)=>{
         let reg = /^[\u4e00-\u9fa5]+$/
@@ -313,15 +306,15 @@
     },
     methods: {
       switchChange(event,id){
-          this.axiosParams = new Object();
-          this.axiosParams.event = event;
-          this.axiosParams.id = id;
-          this.$axios.post("/iorder/User/updateState",this.axiosParams)
-            .then(res=>{
-            })
-            .catch(e=>{
-              console.log(e)
-            })
+        this.axiosParams = new Object();
+        this.axiosParams.event = event;
+        this.axiosParams.id = id;
+        this.$axios.post("/iorder/User/updateState",this.axiosParams)
+          .then(res=>{
+          })
+          .catch(e=>{
+            console.log(e)
+          })
       },
       lock(){
         this.multipleSelection.forEach(data=>{
@@ -367,37 +360,37 @@
         this.axiosParams.username = this.form.username;
         this.axiosParams.id = this.form.id;
         this.$axios.post("/iorder/User/isExit",this.axiosParams)
-        .then(res=>{
-          if ((res.data == false)){
-            this.$message({
-              message: '用户名已存在！',
-              type: 'warning',
-              center:true
-            });
-            this.form.username = null;
-          }
-        })
-        .catch(e=>{
-          console.log(e)
-        })
+          .then(res=>{
+            if ((res.data == false)){
+              this.$message({
+                message: '用户名已存在！',
+                type: 'warning',
+                center:true
+              });
+              this.form.username = null;
+            }
+          })
+          .catch(e=>{
+            console.log(e)
+          })
       },
       checkExit(){
         this.axiosParams = new Object();
         this.axiosParams.username = this.addform.username;
         this.$axios.post("/iorder/Login/isExit",this.axiosParams)
-        .then(res=>{
-          if (res.data.user!=null){
-            this.$message({
-              message: '用户名已存在！',
-              type: 'warning',
-              center:true
-            });
-            this.addform.username = null;
-          }
-        })
-        .catch(e=>{
-          console.log(e)
-        })
+          .then(res=>{
+            if (res.data.user!=null){
+              this.$message({
+                message: '用户名已存在！',
+                type: 'warning',
+                center:true
+              });
+              this.addform.username = null;
+            }
+          })
+          .catch(e=>{
+            console.log(e)
+          })
       },
       search(){
         this.currentPage = 1;
@@ -441,89 +434,89 @@
         return isJPGPNG && isLt500K;
       },
       upload(formName){
-          this.$refs[formName].validate((valid)=>{
-            if (valid){
-              if (this.files!=""&&this.files!=null){
-                let formData = new FormData();
-                formData.append("file",this.files);
-                formData.append("name",this.addform.name);
-                formData.append("username",this.addform.username);
-                formData.append("root",this.addform.value);
-                this.$axios.post("/iorder/User/upload",formData,{headers:{'Content-Type': 'multipart/form-data;charset=utf-8'}})
-                  .then(res=>{
-                    if (res.data == true){
-                      this.$message({
-                        message:'添加员工成功！',
-                        type:'success',
-                        center:true
-                      })
-                      this.files = "";
-                      this.addForm = false;
-                      this.ajaxCall();
-                    }else {
-                      this.$message({
-                        message:'添加员工失败！',
-                        type:'error',
-                        center:true
-                      })
-                      this.addForm = false;
-                    }
-                  })
-                  .catch(e=>{
-                    console.log(e)
-                  })
-              }else {
-                this.$message({
-                  message:'请选择要上传的图片！',
-                  type:'warning',
-                  center:true
+        this.$refs[formName].validate((valid)=>{
+          if (valid){
+            if (this.files!=""&&this.files!=null){
+              let formData = new FormData();
+              formData.append("file",this.files);
+              formData.append("name",this.addform.name);
+              formData.append("username",this.addform.username);
+              formData.append("root",this.addform.value);
+              this.$axios.post("/iorder/User/upload",formData,{headers:{'Content-Type': 'multipart/form-data;charset=utf-8'}})
+                .then(res=>{
+                  if (res.data == true){
+                    this.$message({
+                      message:'添加员工成功！',
+                      type:'success',
+                      center:true
+                    })
+                    this.files = "";
+                    this.addForm = false;
+                    this.ajaxCall();
+                  }else {
+                    this.$message({
+                      message:'添加员工失败！',
+                      type:'error',
+                      center:true
+                    })
+                    this.addForm = false;
+                  }
                 })
-              }
+                .catch(e=>{
+                  console.log(e)
+                })
+            }else {
+              this.$message({
+                message:'请选择要上传的图片！',
+                type:'warning',
+                center:true
+              })
             }
-          });
+          }
+        });
       },
       update(formName){
-          this.$refs[formName].validate((valid)=>{
-            if (valid){
-              if (this.updateFile!=""&&this.updateFile!=null){
-                let formData = new FormData();
-                formData.append("updateFile",this.updateFile);
-                formData.append("username",this.form.username);
-                formData.append("name",this.form.name);
-                formData.append("root",this.form.value);
-                formData.append("id",this.form.id);
-                this.$axios.post("/iorder/User/update",formData,{headers:{'Content-Type': 'multipart/form-data;charset=utf-8'}})
-                  .then(res=>{
-                    if (res.data == true){
-                      this.$message({
-                        message:'修改员工信息成功！',
-                        type:'success',
-                        center:true
-                      })
-                      this.updateFile = "";
-                      this.dialogFormVisible = false;
-                      this.ajaxCall();
-                    }else {
-                      this.$message({
-                        message:'修改员工信息失败！',
-                        type:'error',
-                        center:true
-                      })
-                      this.dialogFormVisible = false;
-                    }
-                  })
-                  .catch(e=>{
-                    console.log(e)
-                  })
-              }else {
-                this.$message({
-                  message:'请选择要上传的图片！',
-                  type:'warning',
-                  center:true
+        this.$refs[formName].validate((valid)=>{
+          if (valid){
+            if (this.updateFile!=""&&this.updateFile!=null){
+              let formData = new FormData();
+              formData.append("updateFile",this.updateFile);
+              formData.append("username",this.form.username);
+              formData.append("name",this.form.name);
+              formData.append("root",this.form.value);
+              formData.append("id",this.form.id);
+              this.$axios.post("/iorder/User/update",formData,{headers:{'Content-Type': 'multipart/form-data;charset=utf-8'}})
+                .then(res=>{
+                  if (res.data == true){
+                    this.$message({
+                      message:'修改员工信息成功！',
+                      type:'success',
+                      center:true
+                    })
+                    this.updateFile = "";
+                    this.dialogFormVisible = false;
+                    this.ajaxCall();
+                  }else {
+                    this.$message({
+                      message:'修改员工信息失败！',
+                      type:'error',
+                      center:true
+                    })
+                    this.dialogFormVisible = false;
+                  }
                 })
-              }
+                .catch(e=>{
+                  console.log(e)
+                })
+            }else {
+              this.$message({
+                message:'请选择要上传的图片！',
+                type:'warning',
+                center:true
+              })
             }
-          });
+          }
+        });
 
       },
       ajaxCall(){
@@ -540,13 +533,13 @@
             console.log(e)
           });
         this.$axios.post("/iorder/Root/list")
-        .then(res=>{
-          res.data.list.push({id:5,rootName:'无',disabled:true});
-          this.root =res.data.list;
-        })
-        .catch(e=>{
-          console.log(e)
-        })
+          .then(res=>{
+            res.data.list.push({id:5,rootName:'无',disabled:true});
+            this.root =res.data.list;
+          })
+          .catch(e=>{
+            console.log(e)
+          })
       },
       deleteAll(){
         this.$confirm('此操作将永久删除已选择的职员, 是否继续?', '提示', {

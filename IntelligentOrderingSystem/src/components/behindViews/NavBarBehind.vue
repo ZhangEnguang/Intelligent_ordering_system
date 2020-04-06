@@ -39,8 +39,8 @@
               <span>菜品管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="4-1" route="">办理会员</el-menu-item>
-              <el-menu-item index="4-2" route="">会员充值</el-menu-item>
+              <el-menu-item index="4-1" route="/FoodBehindList">菜品</el-menu-item>
+              <el-menu-item index="4-2" route="/FoodTypeList">菜品类别</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="5">

@@ -13,8 +13,9 @@
             <span>点餐</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="1-1" route="/FoodList">麻辣狂欢</el-menu-item>
-            <el-menu-item index="1-2" route="/DrinkList">痛快畅饮</el-menu-item>
+            <el-menu-item index="1-1" route="/FoodList">放肆吃</el-menu-item>
+            <el-menu-item index="1-2" route="/FoodList">麻辣狂欢</el-menu-item>
+            <el-menu-item index="1-3" route="/DrinkList">痛快畅饮</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="2">
