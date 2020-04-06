@@ -315,7 +315,7 @@
     methods: {
       handleChange(row) {
         this.axiosParams = new Object();
-        this.axiosParams.discount = row.discount;
+        this.axiosParams.discount = row.discount.toFixed(2);
         this.axiosParams.id = row.id;
         this.$axios.post("/iorder/Food/updateDiscount",this.axiosParams)
         .then(()=>{
