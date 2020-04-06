@@ -2,13 +2,13 @@
   <div  class="container">
     <transition name="el-zoom-in-center">
       <div v-show="showMain" style="height: 500px">
-        <div style="width: 100%;text-align: center"><span style="line-height: 50px;font-family: 'Helvetica Neue';font-size: 30px;color: white;font-weight: bolder;">员工列表</span></div>
+        <div style="width: 100%;text-align: center"><span style="line-height: 50px;font-family: 'Helvetica Neue';font-size: 30px;color: white;font-weight: bolder;">菜品列表</span></div>
         <el-header style="height: 40px" class="static">
-          <el-button type="success" plain size="mini" @click="unlock">上架</el-button>
-          <el-button type="info" plain size="mini" @click="lock">下架</el-button>
+          <el-button type="success" plain size="mini" @click="show">上架</el-button>
+          <el-button type="info" plain size="mini" @click="unShow">下架</el-button>
           <el-button type="danger" plain size="mini" @click="deleteAll">删除</el-button>
           <el-button type="primary" plain size="mini" @click="addEmp">添加</el-button>
-          <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入用户信息"></el-input>
+          <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入菜品信息"></el-input>
           <el-button type="primary" @click="search" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-search">查询</el-button>
           <el-button type="primary" @click="reset" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-refresh-right">重置</el-button>
         </el-header>
@@ -39,7 +39,7 @@
             <el-table-column
               label="图片"
               align="center"
-              width="150px">
+              width="100px">
               <template slot-scope="scope">
                 <el-image class="image" :src="'.'+scope.row.img" :preview-src-list="['.'+scope.row.img]"></el-image>
               </template>
@@ -49,22 +49,21 @@
               align="center"
               width="100px"
               show-overflow-tooltip>
-              <template slot-scope="scope">{{scope.row.name}}</template>
+              <template slot-scope="scope">{{scope.row.foodName}}</template>
             </el-table-column>
             <el-table-column
               label="所属种类"
               align="center"
               width="100px"
               show-overflow-tooltip>
-              <template slot-scope="scope">{{scope.row.username}}</template>
+              <template slot-scope="scope">{{scope.row.typeName}}</template>
             </el-table-column>
             <el-table-column
-              label="单价"
+              label="单价(元)"
               align="center"
               width="100px">
               <template  slot-scope="scope">
-                <span v-if="scope.row.rootName == '无'">暂无职位</span>
-                <span v-else>{{scope.row.rootName}}</span>
+                {{scope.row.price}}
               </template>
             </el-table-column>
             <el-table-column
@@ -72,19 +71,28 @@
               align="center"
               show-overflow-tooltip
               width="100px">
-              <template slot-scope="scope">{{scope.row.serviceTimes}}</template>
+              <template slot-scope="scope">{{scope.row.description}}</template>
             </el-table-column>
             <el-table-column
               label="是否打折"
               align="center"
-              width="150px">
-              <template slot-scope="scope">{{scope.row.serviceGrade}}</template>
+              width="160px">
+              <template slot-scope="scope">
+                <el-switch
+                  v-model="scope.row.isDiscount"
+                  :active-value="1"
+                  :inactive-value="0"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949" @change="switchChangeDiscount($event,scope.row.id)" ></el-switch>
+              </template>
             </el-table-column>
             <el-table-column
-              label="折扣"
-              align="center"
-              width="80px">
-              <template slot-scope="scope">{{scope.row.rate}}</template>
+              label="折扣(折)"
+              align="center">
+              <template slot-scope="scope">
+                <el-input-number v-if="scope.row.isDiscount == 1" v-model="scope.row.discount" controls-position="right" @change="handleChange(scope.row)" size="mini" :precision="1" :step="0.1" :min="0.1" :max="10"></el-input-number>
+                <el-input-number v-else  v-model="scope.row.discount" controls-position="right" size="mini" disabled></el-input-number>
+              </template>
             </el-table-column>
             <el-table-column
               label="是否上架"
@@ -92,7 +100,7 @@
               width="100px">
               <template slot-scope="scope">
                 <el-switch
-                  v-if="scope.row.root == 5"
+                  v-if="scope.row.typeid == 5"
                   v-model="scope.row.state"
                   :active-value="1"
                   :inactive-value="0"
@@ -104,7 +112,7 @@
                   :active-value="1"
                   :inactive-value="0"
                   active-color="#13ce66"
-                  inactive-color="#ff4949" @change="switchChange($event,scope.row.id,scope.row.root,scope.row.state)" ></el-switch>
+                  inactive-color="#ff4949" @change="switchChangeState($event,scope.row.id)" ></el-switch>
               </template>
             </el-table-column>
             <el-table-column label="操作" align="center" >
@@ -164,7 +172,7 @@
         <el-form-item label="员工职位" :label-width="formLabelWidth" prop="value">
           <el-select v-model="form.value" filterable placeholder="请选择" >
             <el-option
-              v-for="(item,key) in root"
+              v-for="(item,key) in foodType"
               :disabled="item.disabled"
               :key="key"
               :label="item.rootName"
@@ -204,7 +212,7 @@
         <el-form-item label="员工职位" :label-width="formLabelWidth" prop="value">
           <el-select v-model="addform.value" filterable placeholder="请选择" >
             <el-option
-              v-for="(item,key) in root"
+              v-for="(item,key) in foodType"
               :key="key"
               :disabled="item.disabled"
               :label="item.rootName"
@@ -261,7 +269,7 @@
         files:"",
         updateFile:"",
         fileList:[],
-        root:[],
+        foodType:[],
         fileItem:{
           name:'',
           url:''
@@ -305,24 +313,46 @@
 
     },
     methods: {
-      switchChange(event,id){
+      handleChange(row) {
+        this.axiosParams = new Object();
+        this.axiosParams.discount = row.discount;
+        this.axiosParams.id = row.id;
+        this.$axios.post("/iorder/Food/updateDiscount",this.axiosParams)
+        .then(()=>{
+        })
+        .catch(e=>{
+          console.log(e);
+        });
+      },
+      switchChangeDiscount(event,id){
         this.axiosParams = new Object();
         this.axiosParams.event = event;
         this.axiosParams.id = id;
-        this.$axios.post("/iorder/User/updateState",this.axiosParams)
+        this.$axios.post("/iorder/Food/updateIsDiscount",this.axiosParams)
           .then(res=>{
           })
           .catch(e=>{
             console.log(e)
           })
       },
-      lock(){
+      switchChangeState(event,id){
+        this.axiosParams = new Object();
+        this.axiosParams.event = event;
+        this.axiosParams.id = id;
+        this.$axios.post("/iorder/Food/updateIsState",this.axiosParams)
+          .then(res=>{
+          })
+          .catch(e=>{
+            console.log(e)
+          })
+      },
+      unShow(){
         this.multipleSelection.forEach(data=>{
           if (data.state == 1){
             data.state = 0;
             this.axiosParams = new Object();
             this.axiosParams.id = data.id;
-            this.$axios.post("/iorder/User/lock",this.axiosParams)
+            this.$axios.post("/iorder/Food/unShow",this.axiosParams)
               .then(res=>{
               })
               .catch(e=>{
@@ -331,14 +361,14 @@
           }
         })
       },
-      unlock(){
+      show(){
         this.multipleSelection.forEach(data=>{
           if (data.root!=5){
             if (data.state == 0){
               data.state = 1;
               this.axiosParams = new Object();
               this.axiosParams.id = data.id;
-              this.$axios.post("/iorder/User/unlock",this.axiosParams)
+              this.$axios.post("/iorder/Food/show",this.axiosParams)
                 .then(res=>{
                 })
                 .catch(e=>{
@@ -524,7 +554,7 @@
         this.axiosParams.pageSize = this.pageSize;
         this.axiosParams.start = this.currentPage;
         this.axiosParams.input = this.input;
-        this.$axios.post("/iorder/User/list",this.axiosParams)
+        this.$axios.post("/iorder/Food/list",this.axiosParams)
           .then(res=>{
             this.tableData = res.data.page.list;
             this.total = res.data.page.total;
@@ -532,10 +562,10 @@
           .catch(e=>{
             console.log(e)
           });
-        this.$axios.post("/iorder/Root/list")
+        this.$axios.post("/iorder/FoodType/list")
           .then(res=>{
             res.data.list.push({id:5,rootName:'无',disabled:true});
-            this.root =res.data.list;
+            this.foodType =res.data.list;
           })
           .catch(e=>{
             console.log(e)

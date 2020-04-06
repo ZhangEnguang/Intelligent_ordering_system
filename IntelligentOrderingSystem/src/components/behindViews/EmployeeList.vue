@@ -8,7 +8,7 @@
           <el-button type="info" plain size="mini" @click="lock">锁定</el-button>
           <el-button type="danger" plain size="mini" @click="deleteAll">删除</el-button>
           <el-button type="primary" plain size="mini" @click="addEmp">添加</el-button>
-          <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入用户信息"></el-input>
+          <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入员工信息"></el-input>
           <el-button type="primary" @click="search" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-search">查询</el-button>
           <el-button type="primary" @click="reset" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-refresh-right">重置</el-button>
         </el-header>
@@ -103,7 +103,7 @@
                   :active-value="1"
                   :inactive-value="0"
                   active-color="#13ce66"
-                  inactive-color="#ff4949" @change="switchChange($event,scope.row.id,scope.row.root,scope.row.state)" ></el-switch>
+                  inactive-color="#ff4949" @change="switchChange($event,scope.row.id)" ></el-switch>
               </template>
             </el-table-column>
             <el-table-column

@@ -5,7 +5,7 @@
         <div style="width: 100%;text-align: center"><span style="line-height: 50px;font-family: 'Helvetica Neue';font-size: 30px;color: white;font-weight: bolder;">职位列表</span></div>
         <el-header style="height: 40px" class="static">
           <el-button type="primary" plain size="mini" @click="addEmp">添加</el-button>
-          <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入用户信息"></el-input>
+          <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入职位名称"></el-input>
           <el-button type="primary" @click="search" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-search">查询</el-button>
           <el-button type="primary" @click="reset" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-refresh-right">重置</el-button>
         </el-header>
