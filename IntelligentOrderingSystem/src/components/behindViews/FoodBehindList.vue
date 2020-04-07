@@ -7,7 +7,7 @@
           <el-button type="success" plain size="mini" @click="show">上架</el-button>
           <el-button type="info" plain size="mini" @click="unShow">下架</el-button>
           <el-button type="danger" plain size="mini" @click="deleteAll">删除</el-button>
-          <el-button type="primary" plain size="mini" @click="addEmp">添加</el-button>
+          <el-button type="primary" plain size="mini" @click="addFood">添加</el-button>
           <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入菜品信息"></el-input>
           <el-button type="primary" @click="search" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-search">查询</el-button>
           <el-button type="primary" @click="reset" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-refresh-right">重置</el-button>
@@ -33,7 +33,7 @@
               label="编号"
               align="center"
               type="index"
-              width="100px">
+              width="50px">
               <template slot-scope="scope">{{scope.row.id}}</template>
             </el-table-column>
             <el-table-column
@@ -61,9 +61,18 @@
             <el-table-column
               label="单价(元)"
               align="center"
-              width="100px">
+              width="80px">
               <template  slot-scope="scope">
                 {{scope.row.price}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="折扣价格(元)"
+              align="center"
+              width="120px">
+              <template  slot-scope="scope">
+                <span v-if="scope.row.isDiscount == 1">{{((parseFloat(scope.row.price)*parseFloat(scope.row.discount))/10).toFixed(2)}}</span>
+                <span v-else>暂无折扣</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -76,7 +85,7 @@
             <el-table-column
               label="是否打折"
               align="center"
-              width="160px">
+              width="100px">
               <template slot-scope="scope">
                 <el-switch
                   v-model="scope.row.isDiscount"
@@ -146,7 +155,7 @@
     </transition>
 
 
-    <el-dialog title="编辑员工信息" :visible.sync="dialogFormVisible" >
+    <el-dialog title="编辑菜品信息" :visible.sync="dialogFormVisible" >
       <el-form :model="form" ref="form" :rules="rules" status-icon>
         <el-form-item  :label-width="formLabelWidth" class="avatar-uploader" prop="src">
           <el-image v-if="form.src"  :src="form.src" style=" width: 178px; height: 178px;"></el-image>
@@ -163,19 +172,22 @@
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
         </el-form-item>
-        <el-form-item label="员工姓名" :label-width="formLabelWidth" prop="name">
-          <el-input v-model="form.name"  autocomplete="on"></el-input>
+        <el-form-item label="菜品名称" :label-width="formLabelWidth" prop="foodName">
+          <el-input v-model="form.foodName"  autocomplete="on" @blur="checkUpdate"></el-input>
         </el-form-item>
-        <el-form-item label="员工用户名" :label-width="formLabelWidth"  prop="username">
-          <el-input v-model="form.username"  autocomplete="on" @blur="checkUpdate"></el-input>
+        <el-form-item label="单价" :label-width="formLabelWidth"  prop="price">
+          <el-input v-model="form.price"  autocomplete="on" ></el-input>
         </el-form-item>
-        <el-form-item label="员工职位" :label-width="formLabelWidth" prop="value">
+        <el-form-item label="菜品描述" :label-width="formLabelWidth" prop="description">
+          <el-input v-model="form.description"  autocomplete="on"></el-input>
+        </el-form-item>
+        <el-form-item label="所属种类" :label-width="formLabelWidth" prop="value">
           <el-select v-model="form.value" filterable placeholder="请选择" >
             <el-option
               v-for="(item,key) in foodType"
               :disabled="item.disabled"
               :key="key"
-              :label="item.rootName"
+              :label="item.typeName"
               :value="item.id">
             </el-option>
           </el-select>
@@ -187,7 +199,7 @@
       </el-form>
     </el-dialog>
 
-    <el-dialog title="添加员工" :visible.sync="addForm" >
+    <el-dialog title="添加菜品" :visible.sync="addForm" >
       <el-form :model="addform" ref="addform" :rules="rules" status-icon>
         <el-form-item  :label-width="formLabelWidth" class="avatar-uploader" prop="src">
           <el-image  v-if="addform.src" :src="addform.src" style=" width: 178px; height: 178px;"></el-image>
@@ -203,19 +215,22 @@
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
         </el-form-item>
-        <el-form-item label="员工姓名" :label-width="formLabelWidth" prop="name">
-          <el-input v-model="addform.name"  autocomplete="on"></el-input>
+        <el-form-item label="菜品名称" :label-width="formLabelWidth" prop="foodName">
+          <el-input v-model="addform.foodName"  autocomplete="on" @blur="checkExit"></el-input>
         </el-form-item>
-        <el-form-item label="员工用户名" :label-width="formLabelWidth"  prop="username">
-          <el-input v-model="addform.username"  autocomplete="on" @blur="checkExit"></el-input>
+        <el-form-item label="单价" :label-width="formLabelWidth"  prop="price">
+          <el-input v-model="addform.price"  autocomplete="on"></el-input>
         </el-form-item>
-        <el-form-item label="员工职位" :label-width="formLabelWidth" prop="value">
+        <el-form-item label="菜品描述" :label-width="formLabelWidth" prop="description">
+          <el-input v-model="addform.description"  autocomplete="on"></el-input>
+        </el-form-item>
+        <el-form-item label="所属种类" :label-width="formLabelWidth" prop="value">
           <el-select v-model="addform.value" filterable placeholder="请选择" >
             <el-option
               v-for="(item,key) in foodType"
               :key="key"
               :disabled="item.disabled"
-              :label="item.rootName"
+              :label="item.typeName"
               :value="item.id">
             </el-option>
           </el-select>
@@ -235,22 +250,12 @@
   export default {
     name: "FoodBehindList",
     data() {
-      var checkName=(rule,value,callback)=>{
-        let reg = /^[\u4e00-\u9fa5]+$/
+      var checkPrice=(rule,value,callback)=>{
+        let reg = /^[1-9]d*.d*|0.d*[1-9]d*|0?.0+|0$/
         if (!value){
-          return callback(new Error('请输入员工姓名'))
+          return callback(new Error('请输入菜品单价'))
         }else if (!reg.test(value)){
-          return callback(new Error('员工姓名只能是中文'))
-        }else {
-          callback()
-        }
-      };
-      var checkUsername=(rule,value,callback)=>{
-        let reg = /^[A-Za-z0-9]+$/
-        if (!value){
-          return callback(new Error('请输入员工用户名'))
-        }else if (!reg.test(value)){
-          return callback(new Error('员工用户名不能是中文'))
+          return callback(new Error('请输入正确的单价'))
         }else {
           callback()
         }
@@ -277,27 +282,28 @@
         form: {
           id:0,
           src: '',
-          name:'',
-          username:'',
+          foodName:'',
+          price:'',
+          description:'',
           value:''
         },
         addform: {
           src: '',
-          name: '',
-          username:'',
+          foodName: '',
+          price:'',
+          description:'',
           value:''
         },
         formLabelWidth: '120px',
         rules:{
-          name:[
-            {required: true,validator: checkName,trigger:'blur'}
+          price:[
+            {required: true,validator: checkPrice,trigger:'blur'}
           ],
-          username:[
-            {required: true,validator: checkUsername,trigger:'blur'},
-            { min: 3, max: 11, message: '长度在 3 到 11个字符', trigger: 'blur' }
+          foodName:[
+            {required: true,message:'输入菜品名称',trigger:'blur'},
           ],
           value:[
-            {required: true, message: '请选择员工职位', trigger: 'change' }
+            {required: true, message: '请选择员菜品种类', trigger: 'change' }
           ]
         }
       }
@@ -387,17 +393,17 @@
       },
       checkUpdate(){
         this.axiosParams = new Object();
-        this.axiosParams.username = this.form.username;
+        this.axiosParams.foodName = this.form.foodName;
         this.axiosParams.id = this.form.id;
-        this.$axios.post("/iorder/User/isExit",this.axiosParams)
+        this.$axios.post("/iorder/Food/checkUpdate",this.axiosParams)
           .then(res=>{
             if ((res.data == false)){
               this.$message({
-                message: '用户名已存在！',
+                message: '菜品已存在！',
                 type: 'warning',
                 center:true
               });
-              this.form.username = null;
+              this.form.foodName = null;
             }
           })
           .catch(e=>{
@@ -406,16 +412,16 @@
       },
       checkExit(){
         this.axiosParams = new Object();
-        this.axiosParams.username = this.addform.username;
-        this.$axios.post("/iorder/Login/isExit",this.axiosParams)
+        this.axiosParams.foodName = this.addform.foodName;
+        this.$axios.post("/iorder/Food/isExit",this.axiosParams)
           .then(res=>{
-            if (res.data.user!=null){
+            if (res.data.food!=null){
               this.$message({
-                message: '用户名已存在！',
+                message: '菜品已存在！',
                 type: 'warning',
                 center:true
               });
-              this.addform.username = null;
+              this.addform.foodName = null;
             }
           })
           .catch(e=>{
@@ -469,14 +475,15 @@
             if (this.files!=""&&this.files!=null){
               let formData = new FormData();
               formData.append("file",this.files);
-              formData.append("name",this.addform.name);
-              formData.append("username",this.addform.username);
-              formData.append("root",this.addform.value);
-              this.$axios.post("/iorder/User/upload",formData,{headers:{'Content-Type': 'multipart/form-data;charset=utf-8'}})
+              formData.append("FoodName",this.addform.foodName);
+              formData.append("price",this.addform.price);
+              formData.append("description",this.addform.description);
+              formData.append("typeid",this.addform.value);
+              this.$axios.post("/iorder/Food/upload",formData,{headers:{'Content-Type': 'multipart/form-data;charset=utf-8'}})
                 .then(res=>{
                   if (res.data == true){
                     this.$message({
-                      message:'添加员工成功！',
+                      message:'添加菜品成功！',
                       type:'success',
                       center:true
                     })
@@ -485,7 +492,7 @@
                     this.ajaxCall();
                   }else {
                     this.$message({
-                      message:'添加员工失败！',
+                      message:'添加菜品失败！',
                       type:'error',
                       center:true
                     })
@@ -511,15 +518,16 @@
             if (this.updateFile!=""&&this.updateFile!=null){
               let formData = new FormData();
               formData.append("updateFile",this.updateFile);
-              formData.append("username",this.form.username);
-              formData.append("name",this.form.name);
-              formData.append("root",this.form.value);
+              formData.append("foodName",this.form.foodName);
+              formData.append("price",this.form.price);
+              formData.append("typeid",this.form.value);
+              formData.append("description",this.form.description);
               formData.append("id",this.form.id);
-              this.$axios.post("/iorder/User/update",formData,{headers:{'Content-Type': 'multipart/form-data;charset=utf-8'}})
+              this.$axios.post("/iorder/Food/update",formData,{headers:{'Content-Type': 'multipart/form-data;charset=utf-8'}})
                 .then(res=>{
                   if (res.data == true){
                     this.$message({
-                      message:'修改员工信息成功！',
+                      message:'修改菜品信息成功！',
                       type:'success',
                       center:true
                     })
@@ -528,7 +536,7 @@
                     this.ajaxCall();
                   }else {
                     this.$message({
-                      message:'修改员工信息失败！',
+                      message:'修改菜品信息失败！',
                       type:'error',
                       center:true
                     })
@@ -564,7 +572,7 @@
           });
         this.$axios.post("/iorder/FoodType/list")
           .then(res=>{
-            res.data.list.push({id:5,rootName:'无',disabled:true});
+            res.data.list.push({id:5,typeName:'无',disabled:true});
             this.foodType =res.data.list;
           })
           .catch(e=>{
@@ -572,7 +580,7 @@
           })
       },
       deleteAll(){
-        this.$confirm('此操作将永久删除已选择的职员, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除已选择的菜品, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -581,7 +589,7 @@
             this.multipleSelection.forEach(data=>{
               this.axiosParams = new Object();
               this.axiosParams.id = data.id;
-              this.$axios.post("/iorder/User/delete",this.axiosParams)
+              this.$axios.post("/iorder/Food/delete",this.axiosParams)
                 .then(res=>{
                   if(res.data == true){
                     this.$message({
@@ -613,11 +621,12 @@
         });
 
       },
-      addEmp(){
+      addFood(){
         this.files = "";
         this.addform.src = "";
-        this.addform.username = "";
-        this.addform.name = "";
+        this.addform.foodName = "";
+        this.addform.price = "";
+        this.addform.description = "";
         this.addform.value = "";
         this.addForm = true;
       },
@@ -627,9 +636,10 @@
       handleEdit(row) {
         this.updateFile = "";
         this.dialogFormVisible = true;
-        this.form.name = row.name;
-        this.form.username = row.username;
-        this.form.value = row.root;
+        this.form.foodName = row.foodName;
+        this.form.price = row.price;
+        this.form.description = row.description;
+        this.form.value = row.typeid;
         this.form.id = row.id;
         this.form.src = "";
         let s =row.img.split("/");
@@ -642,12 +652,12 @@
       handleDelete(row) {
         this.axiosParams = new Object();
         this.axiosParams.id = row.id;
-        this.$confirm('此操作将永久删除该职员, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除该菜品, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$axios.post("/iorder/User/delete",this.axiosParams)
+          this.$axios.post("/iorder/Food/delete",this.axiosParams)
             .then(res=>{
               if(res.data == true){
                 this.$message({
