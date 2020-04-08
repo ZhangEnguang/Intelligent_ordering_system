@@ -27,8 +27,8 @@
               <el-table-column
                 label="序号"
                 align="center"
-                width="120">
-                <template slot-scope="scope">{{scope.row.id}}</template>
+                width="120"
+                type="index">
               </el-table-column>
               <el-table-column
                 label="图片"

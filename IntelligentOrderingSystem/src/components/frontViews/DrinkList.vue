@@ -13,7 +13,7 @@
 <style scoped>
   .container{
     background-color: #545c64;
-    height: 500px;
+    height: 600px;
     border-top: 1px solid white;
   }
 </style>

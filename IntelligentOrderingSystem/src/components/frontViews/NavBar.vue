@@ -1,6 +1,6 @@
 <template>
 <div >
-  <el-row  style="height: 500px;background-color: #545c64">
+  <el-row  style="height: 600px;background-color: #545c64">
     <el-col :span="24">
       <el-menu default-active='1-1' class="el-menu-vertical-demo"
                background-color="#545c64"
