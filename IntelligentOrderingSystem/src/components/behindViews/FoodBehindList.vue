@@ -47,16 +47,23 @@
             <el-table-column
               label="菜品名称"
               align="center"
-              width="100px"
+              width="80px"
               show-overflow-tooltip>
               <template slot-scope="scope">{{scope.row.foodName}}</template>
             </el-table-column>
             <el-table-column
-              label="所属种类"
+            label="所属种类"
+            align="center"
+            width="100px"
+            show-overflow-tooltip>
+            <template slot-scope="scope">{{scope.row.typeName}}</template>
+          </el-table-column>
+            <el-table-column
+              label="所属板块"
               align="center"
-              width="100px"
+              width="80px"
               show-overflow-tooltip>
-              <template slot-scope="scope">{{scope.row.typeName}}</template>
+              <template slot-scope="scope">{{scope.row.moduleName}}</template>
             </el-table-column>
             <el-table-column
               label="单价(元)"
@@ -79,13 +86,13 @@
               label="菜品描述"
               align="center"
               show-overflow-tooltip
-              width="100px">
+              width="80px">
               <template slot-scope="scope">{{scope.row.description}}</template>
             </el-table-column>
             <el-table-column
               label="是否打折"
               align="center"
-              width="100px">
+              width="90px">
               <template slot-scope="scope">
                 <el-switch
                   v-model="scope.row.isDiscount"
@@ -97,7 +104,8 @@
             </el-table-column>
             <el-table-column
               label="折扣(折)"
-              align="center">
+              align="center"
+              width="140px">
               <template slot-scope="scope">
                 <el-input-number v-if="scope.row.isDiscount == 1" v-model="scope.row.discount" controls-position="right" @change="handleChange(scope.row)" size="mini" :precision="1" :step="0.1" :min="0.1" :max="10"></el-input-number>
                 <el-input-number v-else  v-model="scope.row.discount" controls-position="right" size="mini" disabled></el-input-number>
@@ -106,7 +114,7 @@
             <el-table-column
               label="是否上架"
               align="center"
-              width="100px">
+              width="80px">
               <template slot-scope="scope">
                 <el-switch
                   v-if="scope.row.typeid == 5"
@@ -192,6 +200,16 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="所属模块" :label-width="formLabelWidth" prop="module">
+          <el-select v-model="form.module" filterable placeholder="请选择" >
+            <el-option
+              v-for="(item,key) in moduleType"
+              :key="key"
+              :label="item.moduleName"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item style="margin-left:  500px">
           <el-button @click="resetForm('form')">重置</el-button>
           <el-button type="primary" @click="update('form')">确 定</el-button>
@@ -231,6 +249,16 @@
               :key="key"
               :disabled="item.disabled"
               :label="item.typeName"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="所属模块" :label-width="formLabelWidth" prop="module">
+          <el-select v-model="addform.module" filterable placeholder="请选择" >
+            <el-option
+              v-for="(item,key) in moduleType"
+              :key="key"
+              :label="item.moduleName"
               :value="item.id">
             </el-option>
           </el-select>
@@ -275,6 +303,7 @@
         updateFile:"",
         fileList:[],
         foodType:[],
+        moduleType:[],
         fileItem:{
           name:'',
           url:''
@@ -285,14 +314,16 @@
           foodName:'',
           price:'',
           description:'',
-          value:''
+          value:'',
+          module:''
         },
         addform: {
           src: '',
           foodName: '',
           price:'',
           description:'',
-          value:''
+          value:'',
+          module:''
         },
         formLabelWidth: '120px',
         rules:{
@@ -304,6 +335,9 @@
           ],
           value:[
             {required: true, message: '请选择员菜品种类', trigger: 'change' }
+          ],
+          module:[
+            {required: true, message: '请选择员菜品模块', trigger: 'change' }
           ]
         }
       }
@@ -479,6 +513,7 @@
               formData.append("price",this.addform.price);
               formData.append("description",this.addform.description);
               formData.append("typeid",this.addform.value);
+              formData.append("moduleid",this.addform.module);
               this.$axios.post("/iorder/Food/upload",formData,{headers:{'Content-Type': 'multipart/form-data;charset=utf-8'}})
                 .then(res=>{
                   if (res.data == true){
@@ -521,6 +556,7 @@
               formData.append("foodName",this.form.foodName);
               formData.append("price",this.form.price);
               formData.append("typeid",this.form.value);
+              formData.append("moduleid",this.form.module);
               formData.append("description",this.form.description);
               formData.append("id",this.form.id);
               this.$axios.post("/iorder/Food/update",formData,{headers:{'Content-Type': 'multipart/form-data;charset=utf-8'}})
@@ -577,6 +613,13 @@
           })
           .catch(e=>{
             console.log(e)
+          });
+        this.$axios.post("/iorder/Module/list")
+          .then(res=>{
+            this.moduleType =res.data.list;
+          })
+          .catch(e=>{
+            console.log(e)
           })
       },
       deleteAll(){
@@ -628,6 +671,7 @@
         this.addform.price = "";
         this.addform.description = "";
         this.addform.value = "";
+        this.addform.module = "";
         this.addForm = true;
       },
       handleSelectionChange(val) {
@@ -640,6 +684,7 @@
         this.form.price = row.price;
         this.form.description = row.description;
         this.form.value = row.typeid;
+        this.form.module = row.moduleid;
         this.form.id = row.id;
         this.form.src = "";
         let s =row.img.split("/");
