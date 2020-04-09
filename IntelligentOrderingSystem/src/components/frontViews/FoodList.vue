@@ -25,16 +25,29 @@
                   <el-image v-else class="image" fit="fill" :src="'.'+item.img" :preview-src-list="['.'+item.img]"></el-image>
                   </el-row>
                   <el-row>
-                    <el-col :span="15"><span style="font-weight: bolder;font-size: 30px">{{item.foodName}}</span></el-col>
-                    <el-col :span="5"></el-col>
-                    <el-col :span="4"></el-col>
+                    <el-col :span="14">
+                      <el-popover
+                        placement="bottom"
+                        title="菜品详情"
+                        width="200"
+                        trigger="hover">
+                        <p>{{item.description}}</p>
+                        <div style="text-align: right; margin: 10px">
+                          <el-button type="primary" size="mini" >添加订单</el-button>
+                        </div>
+                        <div slot="reference" class="description"><span  class="foodName">{{item.foodName}}</span></div>
+                      </el-popover>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-row>原价：{{item.price}}￥</el-row>
+                        <el-row v-if="item.isDiscount==1"><span style="color: red">现价：{{item.discountPrice}}￥</span></el-row>
+                        <el-row v-else>现价：{{item.price}}￥</el-row>
+                    </el-col>
                   </el-row>
-
-
                 </div>
             </el-col>
           </el-row>
-          <el-row :gutter="40" style="margin: 30px 30px auto auto">
+          <el-row :gutter="40" style="margin: 10px 30px auto auto">
             <el-col :span="6" v-for="(item,key) in listBottom" :key="key">
               <div class="grid-content bg-purple">
                 <el-row>
@@ -44,9 +57,24 @@
                   <el-image v-else class="image" fit="fill" :src="'.'+item.img" :preview-src-list="['.'+item.img]"></el-image>
                 </el-row>
                 <el-row>
-                  <el-col :span="15"><span style="font-weight: bolder;font-size: 30px">{{item.foodName}}</span></el-col>
-                  <el-col :span="5"></el-col>
-                  <el-col :span="4"></el-col>
+                  <el-col :span="14">
+                    <el-popover
+                      placement="bottom"
+                      title="菜品详情"
+                      width="200"
+                      trigger="hover">
+                      <p>{{item.description}}</p>
+                      <div style="text-align: right; margin: 10px">
+                        <el-button type="primary" size="mini" >添加订单</el-button>
+                      </div>
+                      <div slot="reference" class="description"><span  class="foodName">{{item.foodName}}</span></div>
+                    </el-popover>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-row>原价：{{item.price}}￥</el-row>
+                    <el-row v-if="item.isDiscount==1"><span style="color: red">现价：{{item.discountPrice}}￥</span></el-row>
+                    <el-row v-else>现价：{{item.price}}￥</el-row>
+                  </el-col>
                 </el-row>
               </div>
             </el-col>
@@ -87,7 +115,7 @@
         foodType:[],
         total:0,
         input:'',
-        typeid:'',
+        typeid:''
       }
     },
     mounted() {
@@ -156,5 +184,15 @@
   width: 100%;
   border-radius: 10px 10px 0 0px;
 }
-
+.description{
+  text-align: center;
+  cursor: pointer;
+}
+.description:hover{
+  color: #f60;
+}
+.foodName{
+  font-weight: bolder;
+  font-size: 30px;
+}
 </style>

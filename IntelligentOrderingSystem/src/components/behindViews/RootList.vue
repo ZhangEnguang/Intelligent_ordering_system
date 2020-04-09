@@ -65,7 +65,7 @@
           <el-input v-model="form.rootName"  autocomplete="on" ></el-input>
         </el-form-item>
         <el-form-item style="margin-left:  150px">
-          <el-button @click="resetForm('form')">重置</el-button>
+          <el-button @click="dialogFormVisible=false">取消</el-button>
           <el-button type="primary" @click="update('form')">确 定</el-button>
         </el-form-item>
       </el-form>

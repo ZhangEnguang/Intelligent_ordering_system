@@ -12,6 +12,7 @@ import EmployeeList from "../components/behindViews/EmployeeList";
 import RootList from "../components/behindViews/RootList";
 import FoodTypeList from "../components/behindViews/FoodTypeList";
 import FoodBehindList from "../components/behindViews/FoodBehindList";
+import VipLevelList from "../components/behindViews/VipLevelList";
 
 Vue.use(Router)
 
@@ -91,6 +92,11 @@ export default new Router(
           path: '/FoodBehindList',
           name: 'FoodBehindList',
           component: FoodBehindList
+        },
+        {
+          path: '/VipLevelList',
+          name: 'VipLevelList',
+          component: VipLevelList
         }
       ]
     }

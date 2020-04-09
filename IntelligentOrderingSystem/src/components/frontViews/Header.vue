@@ -109,7 +109,13 @@
                   const h = this.$createElement;
                   this.$notify({
                     title: '注销提醒',
-                    message: h('i', { style: 'color: teal'}, '您已成功退出登录，请浏览菜品，如需点餐请呼叫职员登录，很高兴为您服务，祝您用餐愉快！')
+                    message: h('i',
+                      { style: 'color: teal'},
+                      '您已成功退出登录，' +
+                      '请浏览菜品，' +
+                      '如需点餐请呼叫职员登录，' +
+                      '很高兴为您服务，' +
+                      '祝您用餐愉快！')
                   });
                 })
                 .catch(e=>{

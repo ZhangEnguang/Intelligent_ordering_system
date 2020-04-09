@@ -49,8 +49,8 @@
               <span>会员管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="4-1" route="">办理会员</el-menu-item>
-              <el-menu-item index="4-2" route="">会员充值</el-menu-item>
+              <el-menu-item index="5-1" route="/VipLevelList">会员等级</el-menu-item>
+              <el-menu-item index="5-2" route="">会员展示</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>

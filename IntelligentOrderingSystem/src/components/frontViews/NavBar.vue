@@ -13,9 +13,9 @@
             <span>点餐</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="1-1" route="/FoodList">放肆点餐</el-menu-item>
-            <el-menu-item index="1-2" route="/FoodList">麻辣狂欢</el-menu-item>
-            <el-menu-item index="1-3" route="/DrinkList">痛快畅饮</el-menu-item>
+            <el-menu-item index="1-1" route="/FoodList" @click="setUrl('/FoodList')">放肆点餐</el-menu-item>
+            <el-menu-item index="1-2" route="/FoodList" @click="setUrl('/FoodList')">麻辣狂欢</el-menu-item>
+            <el-menu-item index="1-3" route="/DrinkList" @click="setUrl('/DrinkList')">痛快畅饮</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="2">
@@ -28,15 +28,39 @@
             <el-menu-item index="2-2" route="">会员充值</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
+        <el-menu-item index="3" @click="drawer = true" :route="url">
+          <template slot="title">
+            <i class="el-icon-s-order"></i>
+            <span style="font-weight: bolder;font-size: 20px">订单详情</span>
+          </template>
+        </el-menu-item>
       </el-menu>
     </el-col>
   </el-row>
+
+  <el-drawer
+    title="我是标题"
+    :visible.sync="drawer"
+    :with-header="false">
+    <span>我来啦!</span>
+  </el-drawer>
 </div>
 </template>
 
 <script>
     export default {
-        name: "NavBar"
+        name: "NavBar",
+      data(){
+          return{
+            drawer:false,
+            url:''
+          }
+      },
+      methods:{
+        setUrl(urlName){
+          this.url = urlName;
+        }
+      }
     }
 </script>
 
