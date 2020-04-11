@@ -5,6 +5,8 @@ import IorderBehindConfig from "../components/views/IorderBehindConfig";
 import Login from "../components/Login";
 import FoodList from "../components/frontViews/FoodList";
 import DrinkList from "../components/frontViews/DrinkList";
+import AddCard from "../components/frontViews/AddCard";
+import VipRecharge from "../components/frontViews/VipRecharge";
 import Home from "../components/behindViews/Home";
 import CarouselList from "../components/behindViews/CarouselList";
 import CarouseShow from "../components/behindViews/CarouseShow";
@@ -13,6 +15,7 @@ import RootList from "../components/behindViews/RootList";
 import FoodTypeList from "../components/behindViews/FoodTypeList";
 import FoodBehindList from "../components/behindViews/FoodBehindList";
 import VipLevelList from "../components/behindViews/VipLevelList";
+import VipList from "../components/behindViews/VipList";
 
 Vue.use(Router)
 
@@ -49,6 +52,16 @@ export default new Router(
           path: '/DrinkList',
           name: 'DrinkList',
           component: DrinkList
+        },
+        {
+          path: '/AddCard',
+          name: 'AddCard',
+          component: AddCard
+        },
+        {
+          path: '/VipRecharge',
+          name: 'VipRecharge',
+          component: VipRecharge
         },
       ]
     },
@@ -97,6 +110,11 @@ export default new Router(
           path: '/VipLevelList',
           name: 'VipLevelList',
           component: VipLevelList
+        },
+        {
+          path: '/VipList',
+          name: 'VipList',
+          component: VipList
         }
       ]
     }

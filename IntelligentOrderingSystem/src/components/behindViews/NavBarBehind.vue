@@ -50,7 +50,7 @@
             </template>
             <el-menu-item-group>
               <el-menu-item index="5-1" route="/VipLevelList">会员等级</el-menu-item>
-              <el-menu-item index="5-2" route="">会员展示</el-menu-item>
+              <el-menu-item index="5-2" route="/VipList">会员展示</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>

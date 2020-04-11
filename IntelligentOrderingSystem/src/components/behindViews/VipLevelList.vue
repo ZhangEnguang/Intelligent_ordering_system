@@ -4,7 +4,7 @@
       <div v-show="showMain" style="height: 500px">
         <div style="width: 100%;text-align: center"><span style="line-height: 50px;font-family: 'Helvetica Neue';font-size: 30px;color: white;font-weight: bolder;">职位列表</span></div>
         <el-header style="height: 40px" class="static">
-          <el-button type="primary" plain size="mini" @click="addFoodType">添加</el-button>
+          <el-button type="primary" plain size="mini" @click="addVipLevel">添加</el-button>
           <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入会员等级名称"></el-input>
           <el-button type="primary" @click="search" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-search">查询</el-button>
           <el-button type="primary" @click="reset" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-refresh-right">重置</el-button>
@@ -23,12 +23,12 @@
               width="120">
             </el-table-column>
             <el-table-column
-              label="低档值"
+              label="低档值(元)"
               align="center">
               <template slot-scope="scope">{{scope.row.minNum}}</template>
             </el-table-column>
             <el-table-column
-              label="高档值"
+              label="高档值(元)"
               align="center">
               <template slot-scope="scope">{{scope.row.maxNum}}</template>
             </el-table-column>
@@ -78,13 +78,13 @@
         <el-form-item label="会员等级名称" :label-width="formLabelWidth"  prop="levelName">
           <el-input v-model="form.levelName"  autocomplete="on" ></el-input>
         </el-form-item>
-        <el-form-item label="会员折扣" :label-width="formLabelWidth"  prop="discountNum">
+        <el-form-item label="会员折扣(折)" :label-width="formLabelWidth"  prop="discountNum">
           <el-input-number v-model="form.discountNum" :precision="1" :step="0.1" :min="minOfdiscount" :max="maxOfdiscount"></el-input-number>
         </el-form-item>
-        <el-form-item label="低档值" :label-width="formLabelWidth"  prop="minNum">
+        <el-form-item label="低档值(元)" :label-width="formLabelWidth"  prop="minNum">
           <el-input-number v-model="form.minNum" :min="minOfmin" :max="maxOfmin"></el-input-number>
         </el-form-item>
-        <el-form-item label="高档值" :label-width="formLabelWidth"  prop="maxNum">
+        <el-form-item label="高档值(元)" :label-width="formLabelWidth"  prop="maxNum">
           <el-input-number v-model="form.maxNum" :min="minOfmax" :max="maxOfmax"></el-input-number>
         </el-form-item>
         <el-form-item style="margin-left:  150px">
@@ -94,10 +94,20 @@
       </el-form>
     </el-dialog>
 
-    <el-dialog title="添加菜品类别" :visible.sync="addForm" style="margin: 0 auto;width: 800px;">
+    <el-dialog title="添加会员级别" :visible.sync="addForm" style="margin: 0 auto;width: 800px;">
       <el-form :model="addform" ref="addform" :rules="rules" status-icon>
-        <el-form-item label="菜品类别名称" :label-width="formLabelWidth"  prop="typeName">
-          <el-input v-model="addform.typeName"  autocomplete="on"></el-input>
+        <el-form-item label="会员等级名称" :label-width="formLabelWidth"  prop="levelName">
+          <el-input v-model="addform.levelName"  autocomplete="on"></el-input>
+        </el-form-item>
+        <el-form-item label="会员折扣(折)" :label-width="formLabelWidth"  prop="discountNum">
+          <el-input-number v-model="addform.discountNum" :precision="1" :step="0.1" :min="minOfdiscount" :max="maxOfdiscount"></el-input-number>
+        </el-form-item>
+        <el-form-item label="低档值(元)" :label-width="formLabelWidth"  prop="minNum">
+          <el-input-number v-model="addform.minNum" :min="minOfmin" :max="maxOfmin"></el-input-number>
+        </el-form-item>
+        <el-form-item label="高档值(元)" :label-width="formLabelWidth"  prop="maxNum">
+          <el-input-number v-model="addform.maxNum" v-if="parseFloat(addform.maxNum)<99999999.9" :min="parseFloat(this.addform.minNum)+1" :max="maxOfmax"></el-input-number>
+          <el-input-number v-model="addform.maxNum" v-else :min="parseFloat(this.addform.minNum)" :max="maxOfmax"></el-input-number>
         </el-form-item>
         <el-form-item style="margin-left:  150px">
           <el-button @click="resetForm('addform')">重置</el-button>
@@ -117,7 +127,6 @@
       return {
         showMain:false,
         tableData: [],
-        multipleSelection: [],
         currentPage:1,
         pageSize:10,
         total:0,
@@ -139,7 +148,10 @@
           levelName:''
         },
         addform: {
-          typeName:''
+          minNum:'',
+          maxNum:'',
+          discountNum:'',
+          levelName:''
         },
         formLabelWidth: '120px',
         rules:{
@@ -183,61 +195,80 @@
       addType(formName){
         this.$refs[formName].validate((valid)=>{
           if (valid){
-            this.axiosParams = new Object();
-            this.axiosParams.typeName = this.addform.typeName;
-            this.$axios.post("/iorder/FoodType/addType",this.axiosParams)
-              .then(res=>{
-                if (res.data == true){
-                  this.$message({
-                    message:'添加菜品类别成功！',
-                    type:'success',
-                    center:true
-                  })
-                  this.addForm = false;
-                  this.ajaxCall();
-                }else {
-                  this.$message({
-                    message:'菜品类别已存在！',
-                    type:'error',
-                    center:true
-                  })
-                  this.addForm = false;
-                }
+            if (this.addform.maxNum<=this.addform.minNum){
+              this.$message({
+                message:'最大值输入不合法',
+                type:'error',
+                center:true
               })
-              .catch(e=>{
-                console.log(e)
-              })
+              this.addform.minNum=this.addform.maxNum-1;
+            }else {
+              this.axiosParams = new Object();
+              this.axiosParams.vipLevel = this.addform;
+              this.$axios.post("/iorder/VipLevel/addVipLevel",this.axiosParams)
+                .then(res=>{
+                  if (res.data == true){
+                    this.$message({
+                      message:'添加vip等级成功！',
+                      type:'success',
+                      center:true
+                    })
+                    this.addForm = false;
+                    this.ajaxCall();
+                  }else {
+                    this.$message({
+                      message:'会员等级名称存在，添加vip等级失败！',
+                      type:'error',
+                      center:true
+                    })
+                    this.addForm = false;
+                  }
+                })
+                .catch(e=>{
+                  console.log(e)
+                })
+            }
+
           }
         });
       },
       update(formName){
         this.$refs[formName].validate((valid)=>{
           if (valid){
-            this.axiosParams = new Object();
-            this.axiosParams.id = this.form.id;
-            this.axiosParams.typeName = this.form.typeName;
-            this.$axios.post("/iorder/FoodType/update",this.axiosParams)
-              .then(res=>{
-                if (res.data == true){
-                  this.$message({
-                    message:'修改菜品类别名称成功！',
-                    type:'success',
-                    center:true
-                  })
-                  this.dialogFormVisible = false;
-                  this.ajaxCall();
-                }else {
-                  this.$message({
-                    message:'菜品类别名称已存在！',
-                    type:'error',
-                    center:true
-                  })
-                  this.dialogFormVisible = false;
-                }
+            if (this.form.maxNum<=this.form.minNum){
+              this.$message({
+                message:'最大值输入不合法',
+                type:'error',
+                center:true
               })
-              .catch(e=>{
-                console.log(e)
-              })
+              this.form.minNum=this.form.maxNum-1;
+            }else {
+              this.axiosParams = new Object();
+              this.axiosParams.vipLevel = this.form;
+              this.$axios.post("/iorder/VipLevel/update",this.axiosParams)
+                .then(res=>{
+                  if (res.data == true){
+                    this.$message({
+                      message:'修改成功！',
+                      type:'success',
+                      center:true
+                    })
+                    this.dialogFormVisible = false;
+                    this.ajaxCall();
+                  }else {
+                    this.$message({
+                      message:'会员等级名称存在，修改失败！',
+                      type:'error',
+                      center:true
+                    })
+                    this.dialogFormVisible = false;
+                  }
+                })
+                .catch(e=>{
+                  console.log(e)
+                })
+            }
+
           }
         });
       },
@@ -255,9 +286,33 @@
             console.log(e)
           });
       },
-      addFoodType(){
-        this.addform.typeName = "";
+      addVipLevel(){
         this.addForm = true;
+        this.checkAdd();
+      },
+      checkAdd(){
+        this.$axios.post("/iorder/VipLevel/checkAdd")
+        .then(res=>{
+          if (res.data.discountMap.isFull==0&&res.data.discountMap.isAFull == 0&&res.data.discountMap.isSFull == 0 ){
+            this.maxOfdiscount = res.data.discountMap.maxOfdiscount;
+            this.minOfdiscount = res.data.discountMap.minOfdiscount;
+            this.minOfmin = res.data.discountMap.minOfmin;
+            this.maxOfmin = res.data.discountMap.maxOfmin;
+            this.addform.minNum = this.minOfmin;
+            this.maxOfmax = res.data.discountMap.maxOfmax;
+            this.addform.levelName = "";
+            this.addform.maxNum = this.minOfmax;
+            this.addform.discountNum = this.minOfdiscount;
+          }else {
+            this.$message({
+              message:'等级已满！',
+              type:'warning',
+              center:true
+            })
+            this.addForm = false;
+          }
+
+        })
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
@@ -290,12 +345,12 @@
       handleDelete(row) {
         this.axiosParams = new Object();
         this.axiosParams.id = row.id;
-        this.$confirm('此操作将永久删除该菜品类别同时相关相关菜品将下架, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除此Vip等级?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$axios.post("/iorder/FoodType/delete",this.axiosParams)
+          this.$axios.post("/iorder/VipLevel/delete",this.axiosParams)
             .then(res=>{
               if(res.data == true){
                 this.$message({

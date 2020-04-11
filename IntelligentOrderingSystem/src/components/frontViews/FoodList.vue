@@ -121,7 +121,6 @@
     mounted() {
         this.showMain = true;
         this.ajaxCall();
-
     },
     methods:{
       handleCurrentChange(val) {
