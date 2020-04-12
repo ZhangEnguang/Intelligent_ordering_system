@@ -5,6 +5,9 @@ import IorderBehindConfig from "../components/views/IorderBehindConfig";
 import Login from "../components/Login";
 import FoodList from "../components/frontViews/FoodList";
 import DrinkList from "../components/frontViews/DrinkList";
+import DiscountList from "../components/frontViews/DiscountList";
+import GracefulList from "../components/frontViews/GracefulList";
+import SweetList from "../components/frontViews/SweetList";
 import AddCard from "../components/frontViews/AddCard";
 import VipRecharge from "../components/frontViews/VipRecharge";
 import Home from "../components/behindViews/Home";
@@ -49,9 +52,24 @@ export default new Router(
           component: FoodList
         },
         {
+          path: '/DiscountList',
+          name: 'DiscountList',
+          component: DiscountList
+        },
+        {
+          path: '/GracefulList',
+          name: 'GracefulList',
+          component: GracefulList
+        },
+        {
           path: '/DrinkList',
           name: 'DrinkList',
           component: DrinkList
+        },
+        {
+          path: '/SweetList',
+          name: 'SweetList',
+          component: SweetList
         },
         {
           path: '/AddCard',

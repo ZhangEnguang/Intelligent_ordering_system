@@ -50,7 +50,7 @@
         }
       };
       var checkMoney=(rule,value,callback)=>{
-        let reg = /^[1-9]d*.d*|0.d*[1-9]d*|0?.0+|0$/
+        let reg = /^([0-9])+(\.[0-9]+)?$/
         if (!value){
           return callback(new Error('请输入充值额度'))
         }else if (!reg.test(value)){

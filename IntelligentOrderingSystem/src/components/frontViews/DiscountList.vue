@@ -17,34 +17,34 @@
         <el-main style="width: 98%;margin: 10px auto 0 auto;padding: 0;height: 100%" v-if="listTop!=''&&listTop!=null">
           <el-row :gutter="40" style="margin: 10px 30px 0 0">
             <el-col :span="6" v-for="(item,key) in listTop" :key="key" >
-                <div class="grid-content bg-purple">
-                  <el-row>
+              <div class="grid-content bg-purple">
+                <el-row>
                   <el-badge :value="item.discount+'折'" v-if="item.isDiscount == 1">
                     <el-image class="image" fit="fill" :src="'.'+item.img" :preview-src-list="['.'+item.img]"></el-image>
                   </el-badge>
                   <el-image v-else class="image" fit="fill" :src="'.'+item.img" :preview-src-list="['.'+item.img]"></el-image>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="14">
-                      <el-popover
-                        placement="bottom"
-                        title="菜品详情"
-                        width="200"
-                        trigger="hover">
-                        <p>{{item.description}}</p>
-                        <div style="text-align: right; margin: 10px">
-                          <el-button type="primary" size="mini" >添加订单</el-button>
-                        </div>
-                        <div slot="reference" class="description"><span  class="foodName">{{item.foodName}}</span></div>
-                      </el-popover>
-                    </el-col>
-                    <el-col :span="10">
-                        <el-row>原价：{{item.price}}￥</el-row>
-                        <el-row v-if="item.isDiscount==1"><span style="color: red">现价：{{item.discountPrice}}￥</span></el-row>
-                        <el-row v-else>现价：{{item.price}}￥</el-row>
-                    </el-col>
-                  </el-row>
-                </div>
+                </el-row>
+                <el-row>
+                  <el-col :span="14">
+                    <el-popover
+                      placement="bottom"
+                      title="菜品详情"
+                      width="200"
+                      trigger="hover">
+                      <p>{{item.description}}</p>
+                      <div style="text-align: right; margin: 10px">
+                        <el-button type="primary" size="mini" >添加订单</el-button>
+                      </div>
+                      <div slot="reference" class="description"><span  class="foodName">{{item.foodName}}</span></div>
+                    </el-popover>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-row>原价：{{item.price}}￥</el-row>
+                    <el-row v-if="item.isDiscount==1"><span style="color: red">现价：{{item.discountPrice}}￥</span></el-row>
+                    <el-row v-else>现价：{{item.price}}￥</el-row>
+                  </el-col>
+                </el-row>
+              </div>
             </el-col>
           </el-row>
           <el-row :gutter="40" style="margin: 10px 30px auto auto">
@@ -103,7 +103,7 @@
 
 <script>
   export default {
-    name: "FoodList",
+    name: "DiscountList",
     data(){
       return{
         showMain:false,
@@ -119,8 +119,8 @@
       }
     },
     mounted() {
-        this.showMain = true;
-        this.ajaxCall();
+      this.showMain = true;
+      this.ajaxCall();
     },
     methods:{
       handleCurrentChange(val) {
@@ -137,19 +137,19 @@
         this.axiosParams.typeid  = this.typeid;
         this.axiosParams.pageSize = this.pageSize;
         this.axiosParams.start = this.currentPage;
-        this.axiosParams.sid = 1
+        this.axiosParams.sid = 0;
         this.$axios.post("/iorder/Food/searchFood",this.axiosParams)
           .then(res=>{
-              this.listTop = [];
-              this.listBottom = [];
-              res.data.page.list.forEach((value, index) => {
-                if (index<=3){
-                  this.listTop.push(value);
-                }else {
-                  this.listBottom.push(value);
-                }
-              });
-              this.total = res.data.page.total;
+            this.listTop = [];
+            this.listBottom = [];
+            res.data.page.list.forEach((value, index) => {
+              if (index<=3){
+                this.listTop.push(value);
+              }else {
+                this.listBottom.push(value);
+              }
+            });
+            this.total = res.data.page.total;
           })
           .catch(e=>{
             console.log(e)
@@ -179,20 +179,20 @@
     border-radius: 10px;
     min-height: 100px;
   }
-.image{
-  height: 150px;
-  width: 100%;
-  border-radius: 10px 10px 0 0px;
-}
-.description{
-  text-align: center;
-  cursor: pointer;
-}
-.description:hover{
-  color: #f60;
-}
-.foodName{
-  font-weight: bolder;
-  font-size: 30px;
-}
+  .image{
+    height: 150px;
+    width: 100%;
+    border-radius: 10px 10px 0 0px;
+  }
+  .description{
+    text-align: center;
+    cursor: pointer;
+  }
+  .description:hover{
+    color: #f60;
+  }
+  .foodName{
+    font-weight: bolder;
+    font-size: 30px;
+  }
 </style>

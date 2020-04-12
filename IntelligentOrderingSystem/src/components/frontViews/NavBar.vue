@@ -13,10 +13,11 @@
             <span>点餐</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="1-1" route="/FoodList" @click="setUrl('/FoodList')">放肆点餐</el-menu-item>
+            <el-menu-item index="1-1" route="/DiscountList" @click="setUrl('/DiscountList')">放肆点餐</el-menu-item>
             <el-menu-item index="1-2" route="/FoodList" @click="setUrl('/FoodList')">麻辣狂欢</el-menu-item>
-            <el-menu-item index="1-3" route="/DrinkList" @click="setUrl('/DrinkList')">痛快畅饮</el-menu-item>
-            <el-menu-item index="1-4" route="/DrinkList" @click="setUrl('/DrinkList')">餐后甜品</el-menu-item>
+            <el-menu-item index="1-3" route="/GracefulList" @click="setUrl('/GracefulList')">优雅清淡</el-menu-item>
+            <el-menu-item index="1-4" route="/DrinkList" @click="setUrl('/DrinkList')">痛快畅饮</el-menu-item>
+            <el-menu-item index="1-5" route="/SweetList" @click="setUrl('/SweetList')">餐后甜品</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="2">
