@@ -10,11 +10,11 @@
           </span>
             <el-dropdown-menu slot="dropdown" v-if="!isLogin">
               <el-dropdown-item ><img src="/static/images/default/isNotLogin.png" style="width: 60px;height: 50px;"></el-dropdown-item>
-              <el-dropdown-item command="a">登录</el-dropdown-item>
+              <el-dropdown-item command="a" icon="el-icon-switch-button">登录</el-dropdown-item>
             </el-dropdown-menu>
             <el-dropdown-menu slot="dropdown" v-if="isLogin" >
               <el-dropdown-item ><img :src="image" style="width: 60px;height: 50px;"></el-dropdown-item>
-              <el-dropdown-item command="b">退出</el-dropdown-item>
+              <el-dropdown-item command="b" icon="el-icon-switch-button">退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>

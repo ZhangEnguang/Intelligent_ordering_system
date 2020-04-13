@@ -15,6 +15,8 @@ Vue.prototype.$echarts = Echarts
 Axios.defaults.baseURL = '/api'
 Axios.defaults.headers.post['Content-Type'] = 'application/json'
 Vue.config.productionTip = false
+//定义eventBus进行数据交互
+window.eventBus = new Vue();
 
 /* eslint-disable no-new */
 new Vue({

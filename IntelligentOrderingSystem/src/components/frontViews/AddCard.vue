@@ -12,8 +12,8 @@
               <el-input type="text" v-model="vip.phone" autocomplete="off" ></el-input>
             </el-form-item>
             <el-form-item style="margin-top:30px;text-align: center">
-              <el-button type="primary" @click="addVip('ruleForm')">提交</el-button>
-              <el-button @click="resetForm('ruleForm')">重置</el-button>
+              <el-button type="primary" @click="addVip('ruleForm')" icon="el-icon-document-checked">提交</el-button>
+              <el-button @click="resetForm('ruleForm')" icon="el-icon-refresh-left">重置</el-button>
             </el-form-item>
           </el-form>
         </el-card>

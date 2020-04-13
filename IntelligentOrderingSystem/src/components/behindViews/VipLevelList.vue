@@ -4,7 +4,7 @@
       <div v-show="showMain" style="height: 500px">
         <div style="width: 100%;text-align: center"><span style="line-height: 50px;font-family: 'Helvetica Neue';font-size: 30px;color: white;font-weight: bolder;">职位列表</span></div>
         <el-header style="height: 40px" class="static">
-          <el-button type="primary" plain size="mini" @click="addVipLevel">添加</el-button>
+          <el-button type="primary" plain size="mini" @click="addVipLevel" icon="el-icon-circle-plus-outline">添加</el-button>
           <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入会员等级名称"></el-input>
           <el-button type="primary" @click="search" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-search">查询</el-button>
           <el-button type="primary" @click="reset" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-refresh-right">重置</el-button>
@@ -46,11 +46,11 @@
               <template slot-scope="scope" >
                 <el-button
                   size="mini"
-                  @click="handleEdit(scope.row)">编辑</el-button>
+                  @click="handleEdit(scope.row)" icon="el-icon-edit">编辑</el-button>
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleDelete(scope.row)">删除</el-button>
+                  @click="handleDelete(scope.row)" icon="el-icon-delete">删除</el-button>
               </template>
             </el-table-column>
           </el-table>

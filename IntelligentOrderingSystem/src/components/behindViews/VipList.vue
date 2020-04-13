@@ -73,7 +73,7 @@
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleDelete(scope.row)">注销</el-button>
+                  @click="handleDelete(scope.row)" icon="el-icon-delete">注销</el-button>
               </template>
             </el-table-column>
           </el-table>

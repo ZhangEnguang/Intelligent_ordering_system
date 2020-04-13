@@ -18,7 +18,7 @@
             src="/static/images/default/isNotLogin.png"
             fit="fill "></el-image>
         <div style="padding: 14px; text-align: center">
-          <el-button type="primary" @click="goLogin">请登录</el-button>
+          <el-button type="primary" @click="goLogin" icon="el-icon-switch-button">请登录</el-button>
           <div class="bottom clearfix">
             <time class="time">{{ currentDate }}</time>
           </div>

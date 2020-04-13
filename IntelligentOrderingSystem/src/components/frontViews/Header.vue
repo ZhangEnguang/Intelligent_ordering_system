@@ -8,11 +8,11 @@
               <i class="el-icon-arrow-down el-icon--right" style="color: white"></i>
           </span>
           <el-dropdown-menu slot="dropdown" v-if="!isLogin">
-            <el-dropdown-item command="a">登录</el-dropdown-item>
+            <el-dropdown-item command="a" icon="el-icon-switch-button">登录</el-dropdown-item>
           </el-dropdown-menu>
           <el-dropdown-menu slot="dropdown" v-if="isLogin" >
-            <el-dropdown-item command="b">切换账户</el-dropdown-item>
-            <el-dropdown-item command="c">退出</el-dropdown-item>
+            <el-dropdown-item command="b" icon="el-icon-user">切换账户</el-dropdown-item>
+            <el-dropdown-item command="c" icon="el-icon-switch-button">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>

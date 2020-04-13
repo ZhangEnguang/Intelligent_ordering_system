@@ -33,7 +33,7 @@
                         trigger="hover">
                         <p>{{item.description}}</p>
                         <div style="text-align: right; margin: 10px">
-                          <el-button type="primary" size="mini" >添加订单</el-button>
+                          <el-button type="primary" size="mini" @click="addItem(item)" icon="el-icon-circle-plus-outline">添加订单</el-button>
                         </div>
                         <div slot="reference" class="description"><span  class="foodName">{{item.foodName}}</span></div>
                       </el-popover>
@@ -65,7 +65,7 @@
                       trigger="hover">
                       <p>{{item.description}}</p>
                       <div style="text-align: right; margin: 10px">
-                        <el-button type="primary" size="mini" >添加订单</el-button>
+                        <el-button type="primary" size="mini" @click="addItem(item)" icon="el-icon-circle-plus-outline">添加订单</el-button>
                       </div>
                       <div slot="reference" class="description"><span  class="foodName">{{item.foodName}}</span></div>
                     </el-popover>
@@ -130,6 +130,23 @@
       search(){
         this.currentPage = 1;
         this.ajaxCall();
+      },
+      addItem(item){
+        let val = this.$cookies.get('root');
+        if (val==null||val==""){
+          this.$message({
+            message:'请登录后操作',
+            type:'warning',
+            center:true
+          })
+        }else {
+          eventBus.$emit('food',item);
+          this.$message({
+            message:'添加成功',
+            type:'success',
+            center:true
+          })
+        }
       },
       ajaxCall(){
         this.axiosParams = new Object();
