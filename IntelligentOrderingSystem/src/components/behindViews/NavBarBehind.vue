@@ -53,6 +53,12 @@
               <el-menu-item index="5-2" route="/VipList">会员展示</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
+          <el-menu-item index="6" route="/OrderMessage">
+            <template slot="title">
+              <i class="el-icon-s-order"></i>
+              <span style="font-weight: bolder;font-size: 20px">订单详情</span>
+            </template>
+          </el-menu-item>
         </el-menu>
       </el-col>
     </el-row>

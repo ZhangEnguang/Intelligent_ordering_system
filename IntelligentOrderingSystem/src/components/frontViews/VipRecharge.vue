@@ -121,9 +121,9 @@
               this.axiosParams.money = parseFloat(this.vip.money).toFixed(2);
               this.$axios.post("/iorder/Vip/recharge",this.axiosParams)
                 .then(res=>{
-                  if (res.data==true){
+                  if (res.data.isVip==true){
                     this.$message({
-                      message:'充值成功！',
+                      message:'充值成功！当前卡余额为'+res.data.vip.money,
                       type:'success',
                       center:true
                     })

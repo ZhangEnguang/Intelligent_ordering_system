@@ -19,6 +19,7 @@ import FoodTypeList from "../components/behindViews/FoodTypeList";
 import FoodBehindList from "../components/behindViews/FoodBehindList";
 import VipLevelList from "../components/behindViews/VipLevelList";
 import VipList from "../components/behindViews/VipList";
+import OrderMessage from "../components/behindViews/OrderMessage";
 
 Vue.use(Router)
 
@@ -133,6 +134,11 @@ export default new Router(
           path: '/VipList',
           name: 'VipList',
           component: VipList
+        },
+        {
+          path: '/OrderMessage',
+          name: 'OrderMessage',
+          component: OrderMessage
         }
       ]
     }

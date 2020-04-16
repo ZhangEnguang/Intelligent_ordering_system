@@ -23,16 +23,16 @@
         <UserMsg></UserMsg>
       </el-aside>
       <el-main style="padding:5px 0 5px 5px;">
-        <div class="block">
+
           <el-carousel height="205px">
             <el-carousel-item v-for="(item,key) in images" :key="key">
               <el-image
                 style="width: 100%; height: 100%;"
-                :src="item"
-                fit="fill "></el-image>
+                :src="'.'+item"
+                fit="fill " ></el-image>
             </el-carousel-item>
           </el-carousel>
-        </div>
+
       </el-main>
     </el-container>
   </div>
@@ -64,7 +64,7 @@
               if (res.data!=null&&res.data!=""){
                 this.images = res.data;
               }else {
-                this.images.push("/static/images/default/lunbo3.jpg");
+                this.images.push("./static/images/default/lunbo3.jpg");
               }
 
             })
@@ -77,7 +77,7 @@
             this.$router.push("/");
           }
           if (command == 'b') {
-            this.$confirm('您即将退出系统, 是否继续?', '提示', {
+            this.$confirm('您即将退出系统，如有订单将取消, 是否继续?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
@@ -98,7 +98,7 @@
             });
           }
           if (command == 'c'){
-            this.$confirm('您即将退出系统, 是否继续?', '提示', {
+            this.$confirm('您即将退出系统, 如有订单将取消，是否继续?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'

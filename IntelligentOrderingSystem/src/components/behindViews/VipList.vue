@@ -160,7 +160,7 @@
       handleDelete(row) {
         this.axiosParams = new Object();
         this.axiosParams.id = row.id;
-        this.$confirm('此操作将永久此会员, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除此会员, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
