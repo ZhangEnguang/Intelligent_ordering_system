@@ -177,11 +177,11 @@
       },
       dateTypeChange(){
         if (this.selectValue == "day"){
-          this.start = moment().startOf('day').format('YYYY-MM-DD');
-          this.end = moment().endOf('day').format('YYYY-MM-DD');
+          this.start = moment(this.dayValue).startOf('day').format('YYYY-MM-DD');
+          this.end = moment(this.dayValue).endOf('day').format('YYYY-MM-DD');
         }else {
-          this.start = moment().startOf('month').format('YYYY-MM-DD');
-          this.end = moment().endOf('month').format('YYYY-MM-DD');
+          this.start = moment(this.monthValue).startOf('month').format('YYYY-MM-DD');
+          this.end = moment(this.monthValue).endOf('month').format('YYYY-MM-DD');
         }
       },
       dateChange(val){
