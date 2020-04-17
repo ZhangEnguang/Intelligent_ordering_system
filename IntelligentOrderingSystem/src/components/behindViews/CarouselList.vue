@@ -27,7 +27,7 @@
               <el-table-column
                 label="序号"
                 align="center"
-                width="120"
+                width="50"
                 type="index">
               </el-table-column>
               <el-table-column

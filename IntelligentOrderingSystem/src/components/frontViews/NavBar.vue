@@ -292,6 +292,13 @@
                           center:true
                         })
                         this.form.phone = "";
+                      }else if(res.data.vip.state == 0){
+                        this.$message({
+                          message:'您的会员卡已冻结！',
+                          type:'error',
+                          center:true
+                        })
+                        this.dialogFormVisible = false;
                       }else if (res.data.vip.money<this.subtotal){
                         this.$message({
                           message:'余额不足，请前往充值！',
