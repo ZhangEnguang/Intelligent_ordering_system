@@ -4,8 +4,8 @@
       <div v-show="showMain" style="height: 500px">
         <div style="width: 100%;text-align: center"><span style="line-height: 50px;font-family: 'Helvetica Neue';font-size: 30px;color: white;font-weight: bolder;">员工列表</span></div>
         <el-header style="height: 40px" class="static">
-          <el-button type="success" plain size="mini" @click="unlock" icon="el-icon-success">解锁</el-button>
-          <el-button type="info" plain size="mini" @click="lock" icon="el-icon-error">锁定</el-button>
+          <el-button type="success" plain size="mini" @click="unlock" icon="el-icon-unlock">解锁</el-button>
+          <el-button type="info" plain size="mini" @click="lock" icon="el-icon-lock">锁定</el-button>
           <el-button type="danger" plain size="mini" @click="deleteAll" icon="el-icon-delete">删除</el-button>
           <el-button type="primary" plain size="mini" @click="addEmp" icon="el-icon-circle-plus-outline">添加</el-button>
           <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入员工信息"></el-input>

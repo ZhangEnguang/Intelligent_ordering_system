@@ -17,12 +17,18 @@
             <el-col :span="6" v-if="selectValue == 'day'">
               <el-date-picker v-model="dayValue" type="date" @change="dateChange" placeholder="选择天"></el-date-picker>
             </el-col>
-            <el-col :span="13">
+            <el-col :span="10">
               <el-button type="primary" @click="search" style="height: 40px;width: 100px" icon="el-icon-search">查询</el-button>
               <el-button type="primary" @click="reset" style="margin-right: 20px;height: 40px;width: 100px" icon="el-icon-refresh-right">重置</el-button>
             </el-col>
             <el-col :span="3">
               <el-button type="danger" plain size="mini" @click="deleteAll" icon="el-icon-delete" >删除</el-button>
+            </el-col>
+            <el-col :span="3">
+              <el-button type="success"  size="mini" style="padding-left: 7px" @click.native="exportExcel(title)" @submit.native.prevent>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#ali-iconexcel"></use>
+                </svg>&nbsp;&nbsp;导出</el-button>
             </el-col>
           </el-row>
         </el-header>
@@ -150,6 +156,7 @@
         total:0,
         count:0,
         axiosParams: new Object(),
+        title:'订单详情'
       }
     },
     mounted() {
@@ -297,6 +304,32 @@
         });
 
       },
+      exportExcel(title){
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        this.axiosParams = new Object();
+        this.axiosParams.pageSize = this.total;
+        this.axiosParams.start = 1;
+        this.axiosParams.startTime = this.start;
+        this.axiosParams.endTime = this.end;
+        this.$axios({method: "post",url: "/iorder/Order/download", data: this.axiosParams, responseType: 'arraybuffer'})
+          .then((res) => {
+            let blob = new Blob([res.data], {type: "application/vnd.ms-excel"});
+            let objectUrl = URL.createObjectURL(blob);
+            let downloadElement = document.createElement('a');
+            downloadElement.href = objectUrl;
+            downloadElement.download = title+'.xlsx';
+            document.body.appendChild(downloadElement);
+            downloadElement.click();
+            document.body.removeChild(downloadElement);
+            window.URL.revokeObjectURL(objectUrl);
+            loading.close();
+          }).catch(()=>{});
+      },
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
@@ -331,5 +364,11 @@
     height: 670px;
     border-top: 1px solid white;
   }
-
+  .icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+  }
 </style>
