@@ -175,11 +175,21 @@
               series: [{
                 name: '销量(份)',
                 type: 'bar',
-                data: res.data.FoodCounts
+                data: res.data.FoodCounts,
+                markPoint: {
+                  data: [
+                    {type: 'max', name: '最大值'},
+                  ]
+                }
               },{
                 name: '销售额(元)',
                 type: 'bar',
-                data: res.data.FoodMoney
+                data: res.data.FoodMoney,
+                markPoint: {
+                  data: [
+                    {type: 'max', name: '最大值'},
+                  ]
+                }
               }]
             });
 
