@@ -361,7 +361,7 @@
   }
   .container{
     background-color: #545c64;
-    height: 670px;
+    height: 800px;
     border-top: 1px solid white;
   }
   .icon {

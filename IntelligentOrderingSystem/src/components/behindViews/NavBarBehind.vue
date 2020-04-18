@@ -1,10 +1,11 @@
 <template>
   <div >
-    <el-row  style="height: 670px;background-color: #545c64;border-top: 1px solid white">
+    <el-row  style="height: 800px;background-color: #545c64;border-top: 1px solid white">
       <el-col :span="24">
         <el-menu  class="el-menu-vertical-demo"
                  background-color="#545c64"
                  text-color="#fff"
+                  default-active='1'
                  active-text-color="#ffd04b"
                  router>
           <el-menu-item index="1" route="/Home">
