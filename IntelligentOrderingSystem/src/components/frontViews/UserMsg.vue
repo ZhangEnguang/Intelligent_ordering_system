@@ -5,8 +5,9 @@
         <el-card :body-style="{ padding: '0px' }" v-if="isLogin" style="margin:5px 0 5px 0;width: auto;height: 205px;background-color: #cecece">
           <img :src="src" class="image">
           <div style="padding: 14px; text-align: center">
-            <span style="text-align: center;font-weight: bolder">点餐员{{name}}</span>
-            <div><span style="text-align: center;">评分{{rate}}</span></div>
+            <div><span style="text-align: center;font-weight: bolder">当前餐桌:{{table}}</span></div>
+            <span style="text-align: center;font-weight: bolder">点餐员:{{name}}</span>
+            <div><span style="text-align: center;font-weight: bolder">职员评分:{{rate}}分</span></div>
             <div class="bottom clearfix">
               <time class="time">{{ currentDate }}</time>
             </div>
@@ -35,9 +36,11 @@
       data() {
         return {
           currentDate: new Date(),
+          axiosParams:new Object(),
           src:'',
           name:'',
           rate:'',
+          table:'无',
           isLogin:false
         };
       },
@@ -61,6 +64,18 @@
       },
       mounted() {
           this.ajaxCall();
+          eventBus.$on('table',res=>{
+            this.axiosParams = new Object();
+            if (!isNaN(res)){
+              this.axiosParams.id = res;
+              this.$axios.post("/iorder/Table/findById",this.axiosParams)
+                .then(res=>{
+                  this.table = res.data.table.tableName;
+                })
+                .catch(()=>{})
+            }
+
+        })
       }
     }
 </script>
@@ -78,7 +93,7 @@
 
   .image {
     width: 150px;
-    height: 100px;
+    height: 80px;
     margin: 0 auto;
     display: block;
   }

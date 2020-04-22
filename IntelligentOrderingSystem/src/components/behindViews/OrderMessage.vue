@@ -60,7 +60,14 @@
               label="点餐人"
               align="center"
               show-overflow-tooltip>
-              <template slot-scope="scope">{{scope.row.name}}</template>
+              <template slot-scope="scope">
+                <span v-if="scope.row.name == null">
+                  员工已离职
+                </span>
+                <span v-else>
+                  {{scope.row.name}}
+                </span>
+              </template>
             </el-table-column>
             <el-table-column
               label="订单额度"
@@ -87,16 +94,28 @@
               <template slot-scope="props">
                 <el-table :data="props.row.orderitems">
                     <el-table-column label="菜品名称" align="center">
-                      <template slot-scope="scope">{{scope.row.food.foodName}}</template>
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.food == null">
+                          菜品已删除
+                        </span>
+                        <span v-else>
+                          {{scope.row.food.foodName}}
+                        </span>
+                      </template>
                     </el-table-column>
                     <el-table-column label="菜品现价(元)" align="center">
                       <template slot-scope="scope">
-                        <span v-if="scope.row.food.isDiscount == 1">
+                        <span v-if="scope.row.food == null">
+                          菜品已删除
+                        </span>
+                        <span v-else>
+                          <span v-if="scope.row.food.isDiscount == 1">
                            {{scope.row.food.discountPrice}}
                         </span>
                        <span v-else>
                          {{scope.row.food.price}}
                        </span>
+                        </span>
                       </template>
                     </el-table-column>
                     <el-table-column label="份数" align="center">

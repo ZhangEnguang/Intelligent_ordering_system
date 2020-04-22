@@ -260,6 +260,7 @@
             }
             this.tableData = [];
             this.subtotal = parseFloat("0").toFixed(2);
+            this.$cookies.set("table",null,"0d");
           })
         },
         payMoney(formName){

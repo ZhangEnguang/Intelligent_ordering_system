@@ -98,6 +98,21 @@
         </el-footer>
       </div>
     </transition>
+    <el-dialog title="餐桌选择" :visible.sync="dialogTableVisible" style="margin: 0 auto;width: 800px;">
+      <div style="text-align: center;height: 100px;margin-top: 50px">
+        <el-select v-model="value" filterable placeholder="请选择"   >
+          <el-option
+            v-for="(item,key) in table"
+            :key="key"
+            :label="item.tableName"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="setTable">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -108,19 +123,27 @@
       return{
         showMain:false,
         axiosParams:new Object(),
+        dialogTableVisible:false,
         listTop:[],
+        table:[],
         listBottom:[],
         currentPage:1,
         pageSize:8,
         foodType:[],
         total:0,
         input:'',
-        typeid:''
+        typeid:'',
+        value:''
       }
     },
     mounted() {
         this.showMain = true;
         this.ajaxCall();
+        this.value = this.$cookies.get('table');
+        if (this.value!=''){
+          eventBus.$emit('table',parseInt(this.value));
+        }
+
     },
     methods:{
       handleCurrentChange(val) {
@@ -131,6 +154,13 @@
         this.currentPage = 1;
         this.ajaxCall();
       },
+      setTable(){
+        if (this.value!=null&&this.value!=''){
+          eventBus.$emit("table",this.value);
+          this.$cookies.set("table",this.value,"1d");
+        }
+        this.dialogTableVisible = false;
+      },
       addItem(item){
         let val = this.$cookies.get('root');
         if (val==null||val==""){
@@ -140,12 +170,17 @@
             center:true
           })
         }else {
-          eventBus.$emit('food',item);
-          this.$message({
-            message:'添加成功',
-            type:'success',
-            center:true
-          })
+          if (this.$cookies.get('table') == null||this.$cookies.get('table') == ''){
+            this.dialogTableVisible = true;
+          }else {
+            eventBus.$emit('food',item);
+            this.$message({
+              message:'添加成功',
+              type:'success',
+              center:true
+            })
+          }
+
         }
       },
       ajaxCall(){
@@ -178,6 +213,13 @@
           .catch(e=>{
             console.log(e)
           });
+        this.$axios.post("/iorder/Table/list")
+        .then(res=>{
+          this.table = res.data.list;
+        })
+        .catch(e=>{
+          console.log(e)
+        })
       }
     }
   }
