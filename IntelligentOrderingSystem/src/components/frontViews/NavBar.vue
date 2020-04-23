@@ -1,6 +1,6 @@
 <template>
 <div >
-  <el-row  style="height: 600px;background-color: #545c64">
+  <el-row  style="height: 700px;background-color: #545c64">
     <el-col :span="24">
       <el-menu default-active='1-2' class="el-menu-vertical-demo"
                background-color="#545c64"
@@ -30,7 +30,16 @@
             <el-menu-item index="2-2" route="/VipRecharge" @click="setUrl('/VipRecharge')">会员充值</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-menu-item index="3" @click="drawer = true" :route="url">
+        <el-submenu index="3">
+          <template slot="title">
+            <i class="el-icon-menu"></i>
+            <span>客户服务</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="3-1" route="/SearchOrder" @click="setUrl('/SearchOrder')">订单查询</el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+        <el-menu-item index="4" @click="drawer = true" :route="url">
           <template slot="title">
             <i class="el-icon-s-order"></i>
             <span style="font-weight: bolder;font-size: 20px">订单详情</span>
@@ -143,7 +152,7 @@
       <el-button type="primary" @click="payMoney('form')">确 定</el-button>
     </div>
   </el-dialog>
-  <el-dialog title="用户打分" :visible.sync="rateView" width="500px">
+  <el-dialog title="用户打分" :visible.sync="rateView" width="500px" :showClose="false" :close-on-click-modal='false'>
     <div style="height: 100%">
       <el-rate
         v-model="value"
@@ -191,7 +200,8 @@
             subtotal:parseFloat("0").toFixed(2),
             isLogin:false,
             radio:'2',
-            formLabelWidth: '120px'
+            formLabelWidth: '120px',
+            oid:''
           }
       },
       methods:{
@@ -242,17 +252,20 @@
             this.rateView = false;
             if (res.data.vip == null||res.data.vip == ""){
               this.$message({
-                message:'本次消费'+this.subtotal+'元，欢迎下次光临！',
+                dangerouslyUseHTMLString: true,
+                message:'本次消费'+this.subtotal+'元，</br>订单编号为'+this.oid+'欢迎下次光临！',
                 type:'success',
                 center:true
               })
             }else {
               this.rateView = false;
               this.$message({
+                dangerouslyUseHTMLString: true,
                 message:'您是本店'+res.data.vip.levelName+
                   '会员，享受折上'+res.data.vip.discountNum+
                   '折优惠，折后本次消费'+(this.subtotal*parseFloat(res.data.vip.discountNum)/10).toFixed(2)+
                   '元，卡余额为' +res.data.vip.money+
+                  '元，</br>订单编号为'+this.oid+
                   '欢迎下次光临！',
                 type:'success',
                 center:true
@@ -270,9 +283,10 @@
             this.axiosParams.uid = uid;
             this.axiosParams.orderitems = this.tableData;
             this.axiosParams.subtotal = this.subtotal;
-            this.$axios.post("/iorder/Order/addOrder",this.axiosParams)
-              .then(()=>{
+            this.$axios.post("/iorder/Order/addOrder?tid="+this.$cookies.get('table'),this.axiosParams)
+              .then(res=>{
                 //用户打分
+                this.oid = res.data.oid;
                 this.dialogFormVisible = false;
                 this.rateView = true;
               })
@@ -313,9 +327,10 @@
                         this.axiosParams.uid = uid;
                         this.axiosParams.orderitems = this.tableData;
                         this.axiosParams.subtotal = (this.subtotal*parseFloat(res.data.vip.discountNum)/10).toFixed(2);
-                        this.$axios.post("/iorder/Order/addOrder?phone="+this.form.phone,this.axiosParams)
-                          .then(()=>{
+                        this.$axios.post("/iorder/Order/addOrder?phone="+this.form.phone+'&tid='+this.$cookies.get('table'),this.axiosParams)
+                          .then(res=>{
                             //用户打分
+                            this.oid = res.data.oid;
                             this.dialogFormVisible = false;
                             this.rateView = true;
                           })

@@ -10,6 +10,7 @@ import GracefulList from "../components/frontViews/GracefulList";
 import SweetList from "../components/frontViews/SweetList";
 import AddCard from "../components/frontViews/AddCard";
 import VipRecharge from "../components/frontViews/VipRecharge";
+import SearchOrder from "../components/frontViews/SearchOrder";
 import Home from "../components/behindViews/Home";
 import CarouselList from "../components/behindViews/CarouselList";
 import CarouseShow from "../components/behindViews/CarouseShow";
@@ -82,6 +83,11 @@ export default new Router(
           path: '/VipRecharge',
           name: 'VipRecharge',
           component: VipRecharge
+        },
+        {
+          path: '/SearchOrder',
+          name: 'SearchOrder',
+          component: SearchOrder
         },
       ]
     },

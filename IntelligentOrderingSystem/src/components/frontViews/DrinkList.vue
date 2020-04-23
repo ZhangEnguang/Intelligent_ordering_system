@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <transition name="el-zoom-in-center">
-      <div v-show="showMain" style="height: 450px">
+      <div v-show="showMain" style="height: 550px">
         <el-header style="padding: 0;background: #545c64;width: 100%;margin: 0 auto" >
           <el-select v-model="typeid" filterable clearable placeholder="请选择菜品种类" style="float: right;margin-right: 20px" @change="search">
             <el-option
@@ -47,7 +47,7 @@
               </div>
             </el-col>
           </el-row>
-          <el-row :gutter="40" style="margin: 10px 30px auto auto">
+          <el-row :gutter="40" style="margin: 80px 30px auto auto">
             <el-col :span="6" v-for="(item,key) in listBottom" :key="key">
               <div class="grid-content bg-purple">
                 <el-row>
@@ -227,7 +227,7 @@
 <style scoped>
   .container{
     background-color: #545c64;
-    height: 600px;
+    height: 700px;
     border-top: 1px solid white;
   }
   .bg-purple {

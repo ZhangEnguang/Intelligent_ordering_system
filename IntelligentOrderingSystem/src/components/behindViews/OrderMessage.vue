@@ -17,14 +17,17 @@
             <el-col :span="6" v-if="selectValue == 'day'">
               <el-date-picker v-model="dayValue" type="date" @change="dateChange" placeholder="选择天"></el-date-picker>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="6">
               <el-button type="primary" @click="search" style="height: 40px;width: 100px" icon="el-icon-search">查询</el-button>
-              <el-button type="primary" @click="reset" style="margin-right: 20px;height: 40px;width: 100px" icon="el-icon-refresh-right">重置</el-button>
+              <el-button type="primary" @click="reset" style="height: 40px;width: 100px" icon="el-icon-refresh-right">重置</el-button>
             </el-col>
-            <el-col :span="3">
+            <el-col :span="6">
+              <el-input   v-model="input" clearable placeholder="请输入订单号" @change="search"></el-input>
+            </el-col>
+            <el-col :span="2">
               <el-button type="danger" plain size="mini" @click="deleteAll" icon="el-icon-delete" >删除</el-button>
             </el-col>
-            <el-col :span="3">
+            <el-col :span="2">
               <el-button type="success"  size="mini" style="padding-left: 7px" @click.native="exportExcel(title)" @submit.native.prevent>
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#ali-iconexcel"></use>
@@ -32,7 +35,7 @@
             </el-col>
           </el-row>
         </el-header>
-        <el-main style="width: 80%;margin: 0 auto;padding: 0;height: 100%;background-color: white">
+        <el-main style="width: 90%;margin: 0 auto;padding: 0;height: 100%;background-color: white">
           <el-table
             ref="multipleTable"
             :data="tableData"
@@ -74,6 +77,19 @@
               align="center"
               show-overflow-tooltip>
               <template slot-scope="scope">{{scope.row.subtotal}}</template>
+            </el-table-column>
+            <el-table-column
+              label="餐桌名称"
+              align="center"
+              show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span v-if="scope.row.tableName == null">
+                  餐桌已移除
+                </span>
+                <span v-else>
+                  {{scope.row.tableName}}
+                </span>
+              </template>
             </el-table-column>
             <el-table-column
               label="生成时间"
@@ -129,7 +145,7 @@
             </el-table-column>
           </el-table>
         </el-main>
-        <el-footer style="padding: 0;background: white;width: 80%;margin: 0 auto">
+        <el-footer style="padding: 0;background: white;width: 90%;margin: 0 auto">
           <div class="block">
             <el-pagination
               @size-change="handleSizeChange"
@@ -174,6 +190,7 @@
         pageSize:10,
         total:0,
         count:0,
+        input:'',
         axiosParams: new Object(),
         title:'订单详情'
       }
@@ -196,6 +213,7 @@
       reset(){
         this.currentPage = 1;
         this.selectValue = 'month';
+        this.input = '';
         this.monthValue = moment().format('YYYY-MM');
         this.start = moment().startOf('month').format('YYYY-MM-DD');
         this.end = moment().endOf('month').format('YYYY-MM-DD');
@@ -232,6 +250,7 @@
         this.axiosParams.start = this.currentPage;
         this.axiosParams.startTime = this.start;
         this.axiosParams.endTime = this.end;
+        this.axiosParams.input = this.input;
         this.$axios.post("/iorder/Order/list",this.axiosParams)
           .then(res=>{
             this.tableData = res.data.page.list;
@@ -335,6 +354,7 @@
         this.axiosParams.start = 1;
         this.axiosParams.startTime = this.start;
         this.axiosParams.endTime = this.end;
+        this.axiosParams.input = this.input;
         this.$axios({method: "post",url: "/iorder/Order/download", data: this.axiosParams, responseType: 'arraybuffer'})
           .then((res) => {
             let blob = new Blob([res.data], {type: "application/vnd.ms-excel"});
