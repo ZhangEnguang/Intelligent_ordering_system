@@ -9,6 +9,8 @@ import './assets/js/iconfont'
 import Axios from "axios";
 import Echarts from "echarts"
 import cookies from "vue-cookies"
+import 'lib-flexible'
+import '../rem'
 Vue.use(ElementUI)
 Vue.use(cookies)
 Vue.prototype.$axios = Axios

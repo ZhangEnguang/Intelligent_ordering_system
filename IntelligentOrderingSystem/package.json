@@ -13,7 +13,10 @@
     "axios": "^0.19.2",
     "echarts": "^4.7.0",
     "element-ui": "^2.13.0",
+    "lib-flexible": "^0.3.2",
     "moment": "^2.24.0",
+    "postcss-px2rem": "^0.3.0",
+    "postcss-px2rem-exclude": "^0.0.6",
     "vue": "^2.5.2",
     "vue-cookies": "^1.7.0",
     "vue-router": "^3.0.1"

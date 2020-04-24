@@ -43,10 +43,6 @@
             tooltip-effect="dark"
             style="width: 100%;margin: 30px auto">
             <el-table-column
-              type="selection"
-              align="center">
-            </el-table-column>
-            <el-table-column
               label="序号"
               align="center"
               type="index">
