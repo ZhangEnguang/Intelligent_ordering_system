@@ -263,7 +263,7 @@
 <style scoped>
   .container{
     background-color: #545c64;
-    height: 800px;
+    height: 1830px;/*px*/
     border-top: 1px solid white;
   }
 </style>

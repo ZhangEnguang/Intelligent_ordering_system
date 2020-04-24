@@ -9,7 +9,7 @@
           <el-button type="primary" @click="search" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-search">查询</el-button>
           <el-button type="primary" @click="reset" style="margin-right: 20px;float: right;height: 40px;width: 100px" icon="el-icon-refresh-right">重置</el-button>
         </el-header>
-        <el-main style="width: 80%;margin: 0 auto;padding: 0;height: 100%;background-color: white">
+        <el-main style="width: 90%;margin: 0 auto;padding: 0;height: 100%;background-color: white">
           <el-table
             ref="multipleTable"
             :data="tableData"
@@ -41,7 +41,7 @@
             </el-table-column>
           </el-table>
         </el-main>
-        <el-footer style="padding: 0;background: white;width: 80%;margin: 0 auto">
+        <el-footer style="padding: 0;background: white;width: 90%;margin: 0 auto">
           <div class="block">
             <el-pagination
               @size-change="handleSizeChange"
@@ -286,14 +286,14 @@
   }
   .static{
     position:absolute;
-    margin-left: 140px;
+    margin-left: 100px;
     z-index: 6;
     background-color: white;
     width: 1000px;
   }
   .container{
     background-color: #545c64;
-    height: 800px;
+    height: 1830px;/*px*/
     border-top: 1px solid white;
   }
 </style>

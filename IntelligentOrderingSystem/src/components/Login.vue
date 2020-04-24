@@ -354,7 +354,7 @@
   }
   .el-card{
     width: 600px;
-    height: 400px;
+    height: 450px;
     background:#cecece;
     padding: 0;
   }

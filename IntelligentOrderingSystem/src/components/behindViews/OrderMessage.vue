@@ -393,14 +393,14 @@
   }
   .static{
     position:absolute;
-    margin-left: 140px;
+    margin-left: 100px;
     z-index: 6;
     background-color: white;
-    width: 1000px;
+    width: 1200px;
   }
   .container{
     background-color: #545c64;
-    height: 800px;
+    height: 1830px;/*px*/
     border-top: 1px solid white;
   }
   .icon {

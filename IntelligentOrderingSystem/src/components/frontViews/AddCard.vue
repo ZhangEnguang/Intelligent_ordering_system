@@ -117,7 +117,7 @@
 <style scoped>
   .container{
     background-color: #545c64;
-    height: 700px;
+    height: 1400px;/*px*/
     border-top: 1px solid white;
   }
   .font{
@@ -128,7 +128,7 @@
     font-weight: bolder;
   }
   .card{
-    height: 200px;
+    height: 300px;
     width: 40%;
     margin: 100px auto;
     background-color: #cecece;

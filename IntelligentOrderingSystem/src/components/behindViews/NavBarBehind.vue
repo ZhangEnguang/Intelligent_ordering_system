@@ -1,6 +1,6 @@
 <template>
   <div >
-    <el-row  style="height: 800px;background-color: #545c64;border-top: 1px solid white">
+    <el-row  class="container">
       <el-col :span="24">
         <el-menu  class="el-menu-vertical-demo"
                  background-color="#545c64"
@@ -82,5 +82,9 @@
 </script>
 
 <style scoped>
-
+.container{
+  height: 1830px;/*px*/
+  background-color: #545c64;
+  border-top: 1px solid white
+}
 </style>
