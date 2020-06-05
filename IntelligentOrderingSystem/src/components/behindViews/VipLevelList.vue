@@ -2,7 +2,7 @@
   <div  class="container">
     <transition name="el-zoom-in-center">
       <div v-show="showMain" style="height: 500px">
-        <div style="width: 100%;text-align: center"><span style="line-height: 50px;font-family: 'Helvetica Neue';font-size: 30px;color: white;font-weight: bolder;">职位列表</span></div>
+        <div style="width: 100%;text-align: center"><span style="line-height: 50px;font-family: 'Helvetica Neue';font-size: 30px;color: white;font-weight: bolder;">会员等级列表</span></div>
         <el-header style="height: 40px" class="static">
           <el-button type="primary" plain size="mini" @click="addVipLevel" icon="el-icon-circle-plus-outline">添加</el-button>
           <el-input style="width: 200px;float: right;" v-model="input" placeholder="请输入会员等级名称"></el-input>

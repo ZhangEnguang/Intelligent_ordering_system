@@ -280,14 +280,14 @@
                   }else {
                     if (res.data.user.root == 2){
                       this.$message({
-                        message: '欢迎'+res.data.user.rootName+res.data.user.name+'点餐',
+                        message: '欢迎'+res.data.user.rootName+res.data.user.name+'登录系统',
                         type: 'success',
                         center: true
                       });
                       this.$router.push('/Home')
                     }else{
                       this.$message({
-                        message: '欢迎'+res.data.user.rootName+res.data.user.name+'登录系统',
+                        message: '欢迎'+res.data.user.rootName+res.data.user.name+'点餐',
                         type: 'success',
                         center: true
                       });

@@ -253,6 +253,7 @@
         this.axiosParams.input = this.input;
         this.$axios.post("/iorder/Order/list",this.axiosParams)
           .then(res=>{
+            console.log(res.data.page.list)
             this.tableData = res.data.page.list;
             this.total = res.data.page.total;
             this.count = res.data.count;
